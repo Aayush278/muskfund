@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Profile — MUSKFUND</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #030712;
+            --surface: #0f172a;
+            --surface2: #1e293b;
+            --border: #334155;
+            --green: #00e5ff;
+            --green-dim: rgba(0, 229, 255, 0.1);
+            --green-mid: rgba(0, 229, 255, 0.3);
+            --gold: #f59e0b;
+            --red: #ef4444;
+            --red-dim: rgba(239, 68, 68, 0.1);
+            --white: #ffffff;
+            --grey: #94a3b8;
+            --grey2: #64748b;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: rgba(9, 9, 11, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--white);
+        }
+
+        .logo-text span {
+            color: var(--green);
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--grey);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        /* MAIN LAYOUT */
+        .main {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 104px 20px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CARDS */
+        .card {
+            background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-label {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--grey);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* PROFILE HEADER */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--green);
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .profile-name {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .profile-id {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--grey);
+            margin-bottom: 12px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .avatar-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .avatar-upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--surface2);
+            border: 2px solid var(--surface);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--green);
+            transition: all 0.2s ease;
+        }
+
+        .avatar-upload-btn:hover {
+            background: var(--green);
+            color: var(--bg);
+        }
+
+        .status-badge.active {
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            color: var(--green);
+        }
+
+        .status-badge.suspended {
+            background: var(--red-dim);
+            border: 1px solid rgba(255, 77, 77, 0.25);
+            color: var(--red);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .member-since {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--grey);
+        }
+
+        /* INFO ROWS */
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--green-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .info-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--grey);
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--white);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .info-value.mono {
+            font-family: var(--font-mono);
+        }
+
+        /* PORTFOLIO GRID */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .stat-cell {
+            background: var(--surface2);
+            padding: 18px;
+        }
+
+        .stat-cell:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        .stat-cell:nth-child(2) {
+            border-radius: 0 12px 0 0;
+        }
+
+        .stat-cell:nth-child(3) {
+            border-radius: 0 0 0 12px;
+        }
+
+        .stat-cell:last-child {
+            border-radius: 0 0 12px 0;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--grey);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: var(--font-mono);
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--white);
+            letter-spacing: -0.5px;
+        }
+
+        .stat-value.profit {
+            color: var(--green);
+        }
+
+        .stat-value.loss {
+            color: var(--red);
+        }
+
+        /* NOTES CARD */
+        .notes-body {
+            font-size: 14px;
+            color: var(--grey);
+            line-height: 1.7;
+            padding-left: 16px;
+            border-left: 3px solid var(--green);
+        }
+
+        /* SECURITY CARD */
+        .security-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .security-value {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--white);
+            flex: 1;
+        }
+
+        .change-pwd-link {
+            font-size: 13px;
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .change-pwd-link:hover {
+            opacity: 0.75;
+        }
+
+        /* SKELETON */
+        .skeleton {
+            background: linear-gradient(90deg, var(--surface2) 25%, var(--surface) 50%, var(--surface2) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 6px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+        }
+
+        .skeleton-line {
+            height: 14px;
+            margin-bottom: 8px;
+        }
+
+        /* ERROR STATE */
+        .error-card {
+            text-align: center;
+            padding: 48px 24px;
+        }
+
+        .error-icon {
+            margin: 0 auto 16px;
+            width: 56px;
+            height: 56px;
+        }
+
+        .error-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: var(--red);
+        }
+
+        .error-msg {
+            color: var(--grey);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .btn-retry {
+            padding: 10px 24px;
+            background: var(--green);
+            color: var(--bg);
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-retry:hover {
+            opacity: 0.85;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            height: 64px;
+            z-index: 100;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            min-width: 44px;
+            min-height: 44px;
+            justify-content: center;
+            background: none;
+            border: none;
+            padding: 0 8px;
+        }
+
+        .nav-tab-label {
+            font-size: 10px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--grey);
+            transition: color 0.2s ease;
+        }
+
+        .nav-tab.active .nav-tab-label {
+            color: var(--green);
+        }
+
+        .nav-tab.active svg {
+            stroke: var(--green) !important;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .navbar {
+                display: none;
+            }
+
+            .bottom-nav {
+                display: flex;
+            }
+
+            body {
+                padding-bottom: 80px;
+            }
+
+            .main {
+                padding: 16px;
+                gap: 16px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 30px;
+            }
+
+            .profile-name {
+                font-size: 22px;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+
+            .stat-cell {
+                padding: 14px;
+            }
+
+            .security-row {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .bottom-nav {
+                display: none !important;
+            }
+        }
+
+        /* HIDDEN */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+
+    <!-- Mobile Performance Optimizations & Grid Fixes -->
+    <style>
+        @media (max-width: 768px) {
+            body::before, body::after { display: none !important; animation: none !important; }
+            .pcard:hover, .stat-card:hover, .card:hover, .pcard-icon, .stat-card-icon { transform: none !important; box-shadow: none !important; }
+            .btn-primary, .hero-visual::before, .hero-visual::after, .pulse-indicator { animation: none !important; }
+            html { scroll-behavior: auto !important; }
+        }
+        @media (max-width: 480px) {
+            /* Force all multi-column grids to 1 column on very small phones to prevent overflow */
+            .stats-grid, .cards-grid, .actions-grid, .two-col-grid, .form-row, .stats-row, .skeleton-stat-row { 
+                grid-template-columns: 1fr !important; 
+            }
+            .data-table-wrap, .txn-table-wrap, .table-wrap {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR (desktop) -->
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="28" height="28" rx="6" fill="rgba(0, 229, 255,0.12)" />
+                <polyline points="4,20 10,13 15,16 24,7" stroke="#00e5ff" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                <circle cx="24" cy="7" r="2" fill="#00e5ff" />
+            </svg>
+            <span class="logo-text">MUSK<span>FUND</span></span>
+        </a>
+        <a href="dashboard.html" class="btn-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+            </svg>
+            Back to Dashboard
+        </a>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main" id="mainContent">
+
+        <!-- SKELETON STATE -->
+        <div id="skeletonState">
+            <div class="card">
+                <div class="profile-header">
+                    <div class="skeleton skeleton-avatar"></div>
+                    <div style="flex:1">
+                        <div class="skeleton skeleton-line" style="width:60%;height:28px;margin-bottom:10px;"></div>
+                        <div class="skeleton skeleton-line" style="width:40%;height:14px;margin-bottom:10px;"></div>
+                        <div class="skeleton skeleton-line" style="width:30%;height:20px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="skeleton skeleton-line" style="width:40%;margin-bottom:20px;"></div>
+                <div class="skeleton skeleton-line" style="width:100%;height:52px;margin-bottom:8px;"></div>
+                <div class="skeleton skeleton-line" style="width:100%;height:52px;margin-bottom:8px;"></div>
+                <div class="skeleton skeleton-line" style="width:100%;height:52px;"></div>
+            </div>
+            <div class="card">
+                <div class="skeleton skeleton-line" style="width:40%;margin-bottom:16px;"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;border-radius:12px;overflow:hidden;">
+                    <div class="skeleton" style="height:80px;"></div>
+                    <div class="skeleton" style="height:80px;"></div>
+                    <div class="skeleton" style="height:80px;"></div>
+                    <div class="skeleton" style="height:80px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ERROR STATE -->
+        <div id="errorState" class="card error-card hidden">
+            <div class="error-icon">
+                <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="28" cy="28" r="28" fill="rgba(255,77,77,0.08)" />
+                    <path d="M28 18v12" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round" />
+                    <circle cx="28" cy="36" r="1.5" fill="#FF4D4D" />
+                    <path d="M16 40 L28 18 L40 40" stroke="#FF4D4D" stroke-width="2" stroke-linejoin="round"
+                        fill="none" />
+                </svg>
+            </div>
+            <div class="error-title">Failed to Load Profile</div>
+            <div class="error-msg">We couldn't fetch your profile data. Please try again.</div>
+            <button class="btn-retry" onclick="loadProfile()">Retry</button>
+        </div>
+
+        <!-- LOADED CONTENT -->
+        <div id="profileContent" class="hidden" style="display:flex;flex-direction:column;gap:20px;">
+
+            <!-- SECTION 1: Profile Header -->
+            <div class="card">
+                <div class="profile-header">
+                    <div class="avatar-wrap">
+                        <div class="avatar" id="avatarEl">--</div>
+                        <label for="avatarUpload" class="avatar-upload-btn" title="Upload Photo">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </label>
+                        <input type="file" id="avatarUpload" accept="image/*" class="hidden" onchange="uploadAvatar(event)">
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name" id="profileName">Loading...</div>
+                        <div class="profile-id" id="profileInvestorId">#000000</div>
+                        <span class="status-badge" id="statusBadge">
+                            <span class="status-dot"></span>
+                            <span id="statusText">Active</span>
+                        </span>
+                        <div class="member-since" id="memberSince">Member since —</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Personal Information -->
+            <div class="card">
+                <div class="card-label">Personal Information</div>
+
+                <div class="info-row">
+                    <div class="info-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Full Name</div>
+                        <div class="info-value" id="infoName">—</div>
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Email Address</div>
+                        <div class="info-value" id="infoEmail">—</div>
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.18a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Phone Number</div>
+                        <div class="info-value mono" id="infoPhone">—</div>
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                            <line x1="7" y1="7" x2="7.01" y2="7" />
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Investor ID</div>
+                        <div class="info-value mono" id="infoInvestorId">—</div>
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Account Role</div>
+                        <div class="info-value" id="infoRole">Investor</div>
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Member Since</div>
+                        <div class="info-value" id="infoMemberSince">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: Portfolio Summary -->
+            <div class="card">
+                <div class="card-label">Portfolio Overview</div>
+                <div class="portfolio-grid">
+                    <div class="stat-cell">
+                        <div class="stat-label">Invested</div>
+                        <div class="stat-value mono" id="statInvested">—</div>
+                    </div>
+                    <div class="stat-cell">
+                        <div class="stat-label">Current Value</div>
+                        <div class="stat-value mono" id="statCurrent">—</div>
+                    </div>
+                    <div class="stat-cell">
+                        <div class="stat-label">Profit / Loss</div>
+                        <div class="stat-value mono" id="statPnl">—</div>
+                    </div>
+                    <div class="stat-cell">
+                        <div class="stat-label">Growth %</div>
+                        <div class="stat-value mono" id="statGrowth">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: Notes (conditionally shown) -->
+            <div class="card hidden" id="notesCard">
+                <div class="card-label">Notes from Manager</div>
+                <div class="notes-body" id="notesBody"></div>
+            </div>
+
+            <!-- SECTION 5: Security -->
+            <div class="card">
+                <div class="card-label">Account Security</div>
+                <div class="security-row">
+                    <div class="info-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Password</div>
+                        <div class="security-value">••••••••</div>
+                    </div>
+                    <a href="set-password.html" class="change-pwd-link">Change Password</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- BOTTOM NAV (mobile) -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-tab">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B95A1" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            <span class="nav-tab-label">Dashboard</span>
+        </a>
+        <a href="dashboard.html#portfolio" class="nav-tab">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B95A1" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                <polyline points="17 6 23 6 23 12" />
+            </svg>
+            <span class="nav-tab-label">Portfolio</span>
+        </a>
+        <a href="profile.html" class="nav-tab active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span class="nav-tab-label">Profile</span>
+        </a>
+        <button class="nav-tab" onclick="handleSignOut()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B95A1" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span class="nav-tab-label">Logout</span>
+        </button>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        let profileData = null;
+        let portfolioData = null;
+
+        function getInitials(name) {
+            if (!name) return '--';
+            const parts = name.trim().split(' ').filter(Boolean);
+            if (parts.length === 1) return parts[0][0].toUpperCase();
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+
+        function formatMemberSince(dateStr) {
+            if (!dateStr) return '—';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        }
+
+        function showSkeleton() {
+            document.getElementById('skeletonState').classList.remove('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('profileContent').classList.add('hidden');
+        }
+
+        function showError() {
+            document.getElementById('skeletonState').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            document.getElementById('profileContent').classList.add('hidden');
+        }
+
+        function showContent() {
+            document.getElementById('skeletonState').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            const content = document.getElementById('profileContent');
+            content.classList.remove('hidden');
+            content.style.display = 'flex';
+        }
+
+        function renderProfile(profile, portfolio) {
+            // Avatar
+            const avatarEl = document.getElementById('avatarEl');
+            if (profile.avatar_url) {
+                avatarEl.innerHTML = '';
+                avatarEl.style.backgroundImage = `url('${profile.avatar_url}')`;
+                avatarEl.style.backgroundSize = 'cover';
+                avatarEl.style.backgroundPosition = 'center';
+            } else {
+                avatarEl.textContent = getInitials(profile.full_name);
+            }
+
+            // Header
+            document.getElementById('profileName').textContent = profile.full_name || '—';
+            document.getElementById('profileInvestorId').textContent = '#' + (profile.investor_id || '000000');
+
+            const badge = document.getElementById('statusBadge');
+            const statusText = document.getElementById('statusText');
+            if (profile.is_active) {
+                badge.className = 'status-badge active';
+                statusText.textContent = 'Active';
+            } else {
+                badge.className = 'status-badge suspended';
+                statusText.textContent = 'Suspended';
+            }
+            document.getElementById('memberSince').textContent = 'Member since ' + formatMemberSince(profile.created_at);
+
+            // Personal Info
+            document.getElementById('infoName').textContent = profile.full_name || '—';
+            document.getElementById('infoEmail').textContent = profile.email || '—';
+            document.getElementById('infoPhone').textContent = profile.phone || '—';
+            document.getElementById('infoInvestorId').textContent = profile.investor_id || '—';
+            document.getElementById('infoRole').textContent = profile.role ? (profile.role.charAt(0).toUpperCase() + profile.role.slice(1)) : 'Investor';
+            document.getElementById('infoMemberSince').textContent = formatMemberSince(profile.created_at);
+
+            // Portfolio
+            if (portfolio) {
+                const invested = parseFloat(portfolio.invested_amount) || 0;
+                const current = parseFloat(portfolio.current_value) || 0;
+                const pnl = current - invested;
+                const growth = invested > 0 ? (pnl / invested) * 100 : 0;
+
+                document.getElementById('statInvested').textContent = typeof formatCurrency === 'function' ? formatCurrency(invested) : '₹' + invested.toLocaleString('en-IN');
+                document.getElementById('statCurrent').textContent = typeof formatCurrency === 'function' ? formatCurrency(current) : '₹' + current.toLocaleString('en-IN');
+
+                const pnlEl = document.getElementById('statPnl');
+                const growthEl = document.getElementById('statGrowth');
+
+                const prefix = pnl >= 0 ? '+' : '';
+                pnlEl.textContent = prefix + (typeof formatCurrency === 'function' ? formatCurrency(Math.abs(pnl)) : '₹' + Math.abs(pnl).toLocaleString('en-IN'));
+                pnlEl.className = 'stat-value mono ' + (pnl >= 0 ? 'profit' : 'loss');
+
+                growthEl.textContent = prefix + growth.toFixed(2) + '%';
+                growthEl.className = 'stat-value mono ' + (growth >= 0 ? 'profit' : 'loss');
+            } else {
+                ['statInvested', 'statCurrent', 'statPnl', 'statGrowth'].forEach(id => {
+                    document.getElementById(id).textContent = 'N/A';
+                });
+            }
+
+            // Notes
+            if (profile.notes && profile.notes.trim()) {
+                document.getElementById('notesCard').classList.remove('hidden');
+                document.getElementById('notesBody').textContent = profile.notes;
+            }
+
+            showContent();
+        }
+
+        async function loadProfile() {
+            showSkeleton();
+            try {
+                // Auth check
+                let session = null;
+                try {
+                    session = await getSession();
+                } catch (e) { }
+
+                if (!session) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                const userId = session.user.id;
+
+                // Fetch profile
+                let profile = null;
+                try {
+                    const res = await getProfile(userId);
+                    if(res && res.data) profile = res.data;
+                } catch (e) { }
+
+                if (!profile) {
+                    // Fallback: fetch directly
+                    const { data, error } = await db.from('profiles').select('*').eq('id', userId).single();
+                    if (error || !data) { showError(); return; }
+                    profile = data;
+                }
+                profileData = profile;
+
+                // Check suspended
+                if (profile.is_active === false) {
+                    window.location.href = 'index.html?suspended=1';
+                    return;
+                }
+
+                // Fetch portfolio
+                const { data: portfolioArr, error: pErr } = await db.from('portfolios').select('*').eq('client_id', userId).maybeSingle();
+                const portfolio = pErr ? null : portfolioArr;
+
+                renderProfile(profile, portfolio);
+            } catch (err) {
+                console.error(err);
+                showError();
+            }
+        }
+
+        async function handleSignOut() {
+            try {
+                if (typeof signOut === 'function') await signOut();
+                else await db.auth.signOut();
+            } catch (e) { }
+            window.location.href = 'index.html';
+        }
+
+        async function uploadAvatar(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Image must be less than 2MB');
+                return;
+            }
+
+            const avatarEl = document.getElementById('avatarEl');
+            const originalHTML = avatarEl.innerHTML;
+            const originalBg = avatarEl.style.backgroundImage;
+            
+            avatarEl.style.backgroundImage = 'none';
+            avatarEl.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>';
+            
+            try {
+                const session = await getSession();
+                const userId = session.user.id;
+                const fileExt = file.name.split('.').pop();
+                const filePath = `${userId}.${fileExt}`;
+
+                // Upload
+                const { error: uploadError } = await db.storage
+                    .from('avatars')
+                    .upload(filePath, file, { upsert: true });
+
+                if (uploadError) throw uploadError;
+
+                // Get public URL
+                const { data: { publicUrl } } = db.storage
+                    .from('avatars')
+                    .getPublicUrl(filePath);
+
+                // Update DB
+                const { error: updateError } = await db
+                    .from('profiles')
+                    .update({ avatar_url: publicUrl })
+                    .eq('id', userId);
+
+                if (updateError) throw updateError;
+
+                // Update UI
+                avatarEl.innerHTML = '';
+                avatarEl.style.backgroundImage = `url('${publicUrl}?t=${Date.now()}')`;
+                avatarEl.style.backgroundSize = 'cover';
+                avatarEl.style.backgroundPosition = 'center';
+                
+                if (profileData) profileData.avatar_url = publicUrl;
+
+            } catch (err) {
+                console.error(err);
+                alert('Upload failed. Please ensure the "avatars" storage bucket exists and is public.');
+                avatarEl.innerHTML = originalHTML;
+                avatarEl.style.backgroundImage = originalBg;
+            }
+        }
+
+        // Kick off
+        loadProfile();
+    </script>
+    <style>
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</body>
+
+</html>

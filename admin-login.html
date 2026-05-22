@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MUSKFUND — Admin Login</title>
+    <meta name="description" content="Secure Admin login portal for MUSKFUND private portfolio management." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #030712;
+            --surface: #0f172a;
+            --surface2: #1e293b;
+            --border: #334155;
+            --green: #00e5ff;
+            --green-dim: rgba(0, 229, 255, 0.1);
+            --green-mid: rgba(0, 229, 255, 0.3);
+            --gold: #f59e0b;
+            --red: #ef4444;
+            --red-dim: rgba(239, 68, 68, 0.1);
+            --white: #ffffff;
+            --grey: #94a3b8;
+            --grey2: #64748b;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: var(--font-body);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px
+        }
+
+        /* background effects */
+        .bg-glow {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 70% 50% at 50% -10%, rgba(0, 229, 255, 0.09) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(0, 229, 255, 0.04) 0%, transparent 60%);
+        }
+
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image:
+                linear-gradient(var(--green) 1px, transparent 1px),
+                linear-gradient(90deg, var(--green) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+
+        /* wrapper */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+            animation: fadein 0.45s ease both;
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 24px;
+            letter-spacing: 2px;
+            color: var(--white);
+        }
+
+        /* card */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 36px;
+            box-shadow: 0 0 60px rgba(0, 229, 255, 0.05), 0 24px 48px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--green-mid), transparent);
+        }
+
+        @media(max-width:480px) {
+            .card {
+                padding: 32px 24px;
+                border-radius: 16px
+            }
+        }
+
+        /* card header */
+        .card-header {
+            text-align: center;
+            margin-bottom: 32px
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+            margin: 0 auto 20px;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 32px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .card-sub {
+            font-size: 14px;
+            color: var(--grey);
+            line-height: 1.6
+        }
+
+        /* suspended banner */
+        .suspended-banner {
+            display: none;
+            background: var(--red-dim);
+            border: 1px solid rgba(255, 77, 77, 0.25);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .suspended-banner.show {
+            display: flex
+        }
+
+        .suspended-banner-icon {
+            flex-shrink: 0;
+            margin-top: 1px
+        }
+
+        .suspended-banner-text {
+            font-size: 13px;
+            color: #ff8080;
+            line-height: 1.6
+        }
+
+        .suspended-banner-title {
+            font-weight: 600;
+            color: var(--red);
+            margin-bottom: 2px;
+            font-size: 13px
+        }
+
+        /* form */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .form-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-wrap {
+            position: relative
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 13px 16px;
+            color: var(--white);
+            font-size: 15px;
+            font-family: var(--font-body);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.08);
+        }
+
+        .form-input::placeholder {
+            color: var(--grey2)
+        }
+
+        .form-input.error {
+            border-color: var(--red)
+        }
+
+        .form-input.error:focus {
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.08)
+        }
+
+        /* password toggle */
+        .pw-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--grey);
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .pw-toggle:hover {
+            color: var(--white)
+        }
+
+        /* field error */
+        .field-error {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--red);
+            margin-top: 2px;
+        }
+
+        .field-error.show {
+            display: flex
+        }
+
+        /* forgot password */
+        .forgot-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -8px;
+        }
+
+        .forgot-link {
+            font-size: 13px;
+            color: var(--grey);
+            text-decoration: none;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-body);
+            padding: 0;
+        }
+
+        .forgot-link:hover {
+            color: var(--green)
+        }
+
+        /* submit */
+        .btn-submit {
+            width: 100%;
+            background: var(--green);
+            color: #0D0F14;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #00c3d9;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0, 229, 255, 0.25);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none
+        }
+
+        /* global error */
+        .global-error {
+            display: none;
+            background: var(--red-dim);
+            border: 1px solid rgba(255, 77, 77, 0.2);
+            border-radius: 10px;
+            padding: 12px 16px;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #ff8080;
+        }
+
+        .global-error.show {
+            display: flex
+        }
+
+        /* divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 4px 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border)
+        }
+
+        .divider-text {
+            font-size: 12px;
+            color: var(--grey2)
+        }
+
+        /* forgot password panel */
+        .forgot-panel {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .forgot-panel.active {
+            display: flex
+        }
+
+        .form.hidden {
+            display: none
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            color: var(--grey);
+            cursor: pointer;
+            font-size: 13px;
+            font-family: var(--font-body);
+            padding: 0;
+            transition: color 0.2s;
+            margin-bottom: 4px;
+            width: fit-content;
+        }
+
+        .back-btn:hover {
+            color: var(--white)
+        }
+
+        /* success state */
+        .success-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 16px;
+            padding: 20px 0;
+        }
+
+        .success-state.show {
+            display: flex
+        }
+
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+        }
+
+        .success-title {
+            font-family: var(--font-display);
+            font-size: 28px;
+            letter-spacing: 1px
+        }
+
+        .success-sub {
+            font-size: 14px;
+            color: var(--grey);
+            line-height: 1.6;
+            max-width: 280px
+        }
+
+        /* spinner */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .spinner {
+            animation: spin 0.8s linear infinite;
+            display: inline-block
+        }
+
+        /* footer note */
+        .footer-note {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: var(--grey2);
+            line-height: 1.6;
+        }
+
+        .footer-note a {
+            color: var(--grey);
+            text-decoration: none;
+            transition: color 0.2s
+        }
+
+        .footer-note a:hover {
+            color: var(--green)
+        }
+
+        /* mobile full screen feel */
+        @media(max-width:480px) {
+            body {
+                padding: 0;
+                align-items: flex-start
+            }
+
+            .wrapper {
+                max-width: 100%;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 24px 16px
+            }
+
+            .logo {
+                margin-bottom: 28px
+            }
+
+            .card {
+                border-left: none;
+                border-right: none;
+                border-radius: 0;
+                box-shadow: none;
+                border-top: none;
+                border-bottom: none;
+                background: var(--surface);
+                padding: 28px 20px;
+            }
+
+            .card::before {
+                display: none
+            }
+        }
+    </style>
+
+    <!-- Mobile Performance Optimizations & Grid Fixes -->
+    <style>
+        @media (max-width: 768px) {
+
+            body::before,
+            body::after {
+                display: none !important;
+                animation: none !important;
+            }
+
+            .pcard:hover,
+            .stat-card:hover,
+            .card:hover,
+            .pcard-icon,
+            .stat-card-icon {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            .btn-primary,
+            .hero-visual::before,
+            .hero-visual::after,
+            .pulse-indicator {
+                animation: none !important;
+            }
+
+            html {
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Force all multi-column grids to 1 column on very small phones to prevent overflow */
+            .stats-grid,
+            .cards-grid,
+            .actions-grid,
+            .two-col-grid,
+            .form-row,
+            .stats-row,
+            .skeleton-stat-row {
+                grid-template-columns: 1fr !important;
+            }
+
+            .data-table-wrap,
+            .txn-table-wrap,
+            .table-wrap {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-glow"></div>
+    <div class="bg-grid"></div>
+
+    <div class="wrapper">
+
+        <!-- LOGO -->
+        <a href="home.html" class="logo">
+            <div class="logo-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 3v18h18" />
+                    <path d="m7 16 4-4 4 4 4-4" />
+                </svg>
+            </div>
+            <span class="logo-text">MUSKFUND</span>
+        </a>
+
+        <div class="card">
+
+            <!-- SUSPENDED BANNER -->
+            <div class="suspended-banner" id="suspendedBanner">
+                <div class="suspended-banner-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF4D4D" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="suspended-banner-title">Account Suspended</div>
+                    <div class="suspended-banner-text">Your investor account has been suspended. Please contact your
+                        portfolio manager on WhatsApp for assistance.</div>
+                </div>
+            </div>
+
+            <!-- CARD HEADER -->
+            <div class="card-header" id="loginHeader">
+                <div class="card-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                </div>
+                <div class="card-title">ADMIN LOGIN</div>
+                <div class="card-sub">Access your private portfolio dashboard</div>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form class="form" id="loginForm" onsubmit="handleLogin(event)" novalidate>
+
+                <!-- email -->
+                <div class="form-group">
+                    <label class="form-label">Admin Email</label>
+                    <div class="input-wrap">
+                        <input type="email" id="emailInput" class="form-input" placeholder="admin@example.com"
+                            autocomplete="email" autocapitalize="none" required />
+                    </div>
+                    <div class="field-error" id="emailError">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <span id="emailErrorText">Please enter a valid email</span>
+                    </div>
+                </div>
+
+                <!-- password -->
+                <div class="form-group">
+                    <label class="form-label">Admin Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="passwordInput" class="form-input" placeholder="Your password"
+                            autocomplete="current-password" style="padding-right:48px" required />
+                        <button type="button" class="pw-toggle" id="pwToggle" onclick="togglePassword()"
+                            aria-label="Show password">
+                            <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="field-error" id="passwordError">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <span id="passwordErrorText">Please enter your password</span>
+                    </div>
+                </div>
+
+                <!-- forgot password -->
+                <div class="forgot-row">
+                    <button type="button" class="forgot-link" onclick="showForgot()">Forgot password?</button>
+                </div>
+
+                <!-- global error -->
+                <div class="global-error" id="globalError">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4D4D" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <span id="globalErrorText">Invalid email or password. Please try again.</span>
+                </div>
+
+                <!-- submit -->
+                <button type="submit" class="btn-submit" id="loginBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                        <polyline points="10 17 15 12 10 7" />
+                        <line x1="15" y1="12" x2="3" y2="12" />
+                    </svg>
+                    Sign In
+                </button>
+
+            </form>
+
+            <!-- FORGOT PASSWORD PANEL -->
+            <div class="forgot-panel" id="forgotPanel">
+
+                <button type="button" class="back-btn" onclick="showLogin()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12" />
+                        <polyline points="12 19 5 12 12 5" />
+                    </svg>
+                    Back to Login
+                </button>
+
+                <div class="card-header" style="margin-bottom:0;padding-bottom:0">
+                    <div class="card-icon" style="width:52px;height:52px">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                    </div>
+                    <div class="card-title" style="font-size:26px">RESET PASSWORD</div>
+                    <div class="card-sub">Enter your email and we will send a reset link.</div>
+                </div>
+
+                <!-- success state -->
+                <div class="success-state" id="resetSuccess">
+                    <div class="success-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </div>
+                    <div class="success-title">EMAIL SENT</div>
+                    <div class="success-sub">Check your inbox for the password reset link. It may take a minute to
+                        arrive.</div>
+                    <button type="button" class="btn-submit" onclick="showLogin()" style="max-width:200px">Back to
+                        Login</button>
+                </div>
+
+                <div id="resetFormWrap">
+                    <div class="form-group" style="margin-bottom:16px">
+                        <label class="form-label">Email Address</label>
+                        <div class="input-wrap">
+                            <input type="email" id="resetEmail" class="form-input" placeholder="your-email@example.com"
+                                autocomplete="email" autocapitalize="none" />
+                        </div>
+                        <div class="field-error" id="resetEmailError">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            <span>Please enter a valid email</span>
+                        </div>
+                    </div>
+
+                    <div class="global-error" id="resetError">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4D4D" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <span id="resetErrorText">Something went wrong. Please try again.</span>
+                    </div>
+
+                    <button type="button" class="btn-submit" id="resetBtn" onclick="handleReset()"
+                        style="margin-top:16px">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                        Send Reset Link
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="footer-note">
+            By logging in you agree to our
+            <a href="terms.html">Terms of Service</a> and
+            <a href="privacy.html">Privacy Policy</a>.<br />
+            <span style="margin-top:6px;display:inline-block">
+                Need help?
+                <a href="https://wa.me/919771534777" target="_blank">Contact us on WhatsApp</a>
+            </span>
+        </div>
+
+    </div>
+
+    <script>
+        // ---- CHECK FOR SUSPENDED PARAM ----
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('suspended') === '1') {
+                document.getElementById('suspendedBanner').classList.add('show');
+            }
+        })();
+
+        // ---- CHECK EXISTING SESSION ----
+        (async function () {
+            try {
+                const session = await getSession();
+                if (session) {
+                    const { data: profile } = await getProfile(session.user.id);
+                    if (profile && profile.is_active) {
+                        if (profile.role === 'admin') {
+                            window.location.href = 'admin-dashboard.html';
+                        } else {
+                            window.location.href = 'dashboard.html';
+                        }
+                    }
+                }
+            } catch (e) { /* no session */ }
+        })();
+
+        // ---- PASSWORD TOGGLE ----
+        let pwVisible = false;
+        function togglePassword() {
+            const input = document.getElementById('passwordInput');
+            const icon = document.getElementById('eyeIcon');
+            pwVisible = !pwVisible;
+            input.type = pwVisible ? 'text' : 'password';
+            icon.innerHTML = pwVisible
+                ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`
+                : `<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>`;
+        }
+
+        // ---- SHOW/HIDE PANELS ----
+        function showForgot() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('loginHeader').style.display = 'none';
+            document.getElementById('forgotPanel').classList.add('active');
+            clearErrors();
+        }
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('loginHeader').style.display = 'block';
+            document.getElementById('forgotPanel').classList.remove('active');
+            document.getElementById('resetSuccess').classList.remove('show');
+            document.getElementById('resetFormWrap').style.display = '';
+            clearErrors();
+        }
+
+        // ---- CLEAR ERRORS ----
+        function clearErrors() {
+            document.getElementById('emailError').classList.remove('show');
+            document.getElementById('passwordError').classList.remove('show');
+            document.getElementById('globalError').classList.remove('show');
+            document.getElementById('emailInput').classList.remove('error');
+            document.getElementById('passwordInput').classList.remove('error');
+        }
+
+        // ---- VALIDATE EMAIL ----
+        function isValidEmail(e) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+        }
+
+        // ---- LOADING STATE ----
+        function setLoginLoading(loading) {
+            const btn = document.getElementById('loginBtn');
+            if (loading) {
+                btn.disabled = true;
+                btn.innerHTML = `
+      <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      </svg>
+      Signing in...`;
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+      </svg>
+      Sign In`;
+            }
+        }
+
+        function setResetLoading(loading) {
+            const btn = document.getElementById('resetBtn');
+            if (loading) {
+                btn.disabled = true;
+                btn.innerHTML = `
+      <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      </svg>
+      Sending...`;
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+      Send Reset Link`;
+            }
+        }
+
+        // ---- HANDLE LOGIN ----
+        async function handleLogin(e) {
+            e.preventDefault();
+            clearErrors();
+
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value;
+
+            // validate
+            let hasError = false;
+            if (!email || !isValidEmail(email)) {
+                document.getElementById('emailInput').classList.add('error');
+                document.getElementById('emailError').classList.add('show');
+                hasError = true;
+            }
+            if (!password) {
+                document.getElementById('passwordInput').classList.add('error');
+                document.getElementById('passwordError').classList.add('show');
+                document.getElementById('passwordErrorText').textContent = 'Please enter your password';
+                hasError = true;
+            }
+            if (hasError) return;
+
+            setLoginLoading(true);
+
+            try {
+                // sign in
+                const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+                if (error) {
+                    setLoginLoading(false);
+                    document.getElementById('emailInput').classList.add('error');
+                    document.getElementById('passwordInput').classList.add('error');
+                    document.getElementById('globalError').classList.add('show');
+
+                    if (error.message.toLowerCase().includes('invalid')) {
+                        document.getElementById('globalErrorText').textContent = 'Invalid email or password. Please check and try again.';
+                    } else if (error.message.toLowerCase().includes('email not confirmed')) {
+                        document.getElementById('globalErrorText').textContent = 'Please confirm your email address first.';
+                    } else {
+                        document.getElementById('globalErrorText').textContent = error.message || 'Login failed. Please try again.';
+                    }
+                    return;
+                }
+
+                // fetch profile
+                const { data: profile, error: profileError } = await db
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', data.user.id)
+                    .single();
+
+                if (profileError || !profile) {
+                    await db.auth.signOut();
+                    setLoginLoading(false);
+                    document.getElementById('globalError').classList.add('show');
+                    document.getElementById('globalErrorText').textContent = 'Account not found. Please contact your portfolio manager.';
+                    return;
+                }
+
+                // check suspended
+                if (!profile.is_active) {
+                    await db.auth.signOut();
+                    setLoginLoading(false);
+                    document.getElementById('suspendedBanner').classList.add('show');
+                    document.getElementById('globalError').classList.remove('show');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+
+                // redirect by role
+                if (profile.role === 'admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    await db.auth.signOut();
+                    setLoginLoading(false);
+                    document.getElementById('globalError').classList.add('show');
+                    document.getElementById('globalErrorText').textContent = 'Unauthorized. Please use the Investor Login page.';
+                    return;
+                }
+
+            } catch (err) {
+                setLoginLoading(false);
+                document.getElementById('globalError').classList.add('show');
+                document.getElementById('globalErrorText').textContent = 'Network error. Please check your connection.';
+            }
+        }
+
+        // ---- HANDLE RESET ----
+        async function handleReset() {
+            const email = document.getElementById('resetEmail').value.trim();
+            document.getElementById('resetEmailError').classList.remove('show');
+            document.getElementById('resetError').classList.remove('show');
+            document.getElementById('resetEmail').classList.remove('error');
+
+            if (!email || !isValidEmail(email)) {
+                document.getElementById('resetEmail').classList.add('error');
+                document.getElementById('resetEmailError').classList.add('show');
+                return;
+            }
+
+            setResetLoading(true);
+
+            try {
+                const { error } = await db.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + '/set-password.html'
+                });
+
+                setResetLoading(false);
+
+                if (error) {
+                    document.getElementById('resetError').classList.add('show');
+                    document.getElementById('resetErrorText').textContent = error.message || 'Failed to send reset email. Please try again.';
+                    return;
+                }
+
+                // show success
+                document.getElementById('resetFormWrap').style.display = 'none';
+                document.getElementById('resetSuccess').classList.add('show');
+
+            } catch (err) {
+                setResetLoading(false);
+                document.getElementById('resetError').classList.add('show');
+                document.getElementById('resetErrorText').textContent = 'Network error. Please check your connection.';
+            }
+        }
+
+        // ---- ENTER KEY ON RESET EMAIL ----
+        document.getElementById('resetEmail').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { handleReset(); }
+        });
+
+        // ---- INPUT CLEAR ERRORS ON TYPE ----
+        document.getElementById('emailInput').addEventListener('input', function () {
+            this.classList.remove('error');
+            document.getElementById('emailError').classList.remove('show');
+            document.getElementById('globalError').classList.remove('show');
+        });
+        document.getElementById('passwordInput').addEventListener('input', function () {
+            this.classList.remove('error');
+            document.getElementById('passwordError').classList.remove('show');
+            document.getElementById('globalError').classList.remove('show');
+        });
+    </script>
+</body>
+
+</html>

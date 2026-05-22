@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MUSKFUND — My Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #030712;          /* darker premium background */
+            --surface: #0f172a;     /* dark card surface */
+            --surface2: #1e293b;    /* slightly lighter surface */
+            --border: #334155;      /* subtle borders */
+            --white: #ffffff;
+            --grey: #94a3b8;
+            --grey2: #64748b;
+            --green: #00e5ff;       /* modern vibrant emerald */
+            --green-dim: rgba(0, 229, 255, 0.1);
+            --green-mid: rgba(0, 229, 255, 0.3);
+            --gold: #f59e0b;        /* modern amber */
+            --red: #ef4444;         /* modern rose red */
+            --red-dim: rgba(239, 68, 68, 0.1);
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --nav-h: 70px;
+            --bottom-nav-h: 60px;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-10deg);
+            font-size: clamp(60px, 15vw, 180px);
+            font-family: var(--font-display);
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.015);
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+            user-select: none;
+            letter-spacing: 10px;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Mesh Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.08) 0%, transparent 60%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+            animation: float 15s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            right: -10%;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.04) 0%, rgba(0, 229, 255, 0.03) 40%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(100px);
+            animation: float 20s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, 5%) scale(1.1); }
+            100% { transform: translate(-5%, 8%) scale(0.95); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px
+        }
+
+        /* ---- TOP NAV ---- */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: var(--nav-h);
+            background: rgba(13, 15, 20, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none
+        }
+
+        .nav-logo-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+        }
+
+        .nav-logo-text {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--white)
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px
+        }
+
+        .nav-investor-info {
+            text-align: right
+        }
+
+        .nav-investor-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.2
+        }
+
+        .nav-investor-id {
+            font-size: 11px;
+            color: var(--green);
+            font-family: var(--font-mono)
+        }
+
+        .nav-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 15px;
+            color: var(--green);
+            cursor: pointer;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+
+        .nav-logout {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--grey);
+            border-radius: 8px;
+            padding: 7px 14px;
+            font-size: 13px;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-logout:hover {
+            border-color: var(--red);
+            color: var(--red)
+        }
+
+        /* ---- MAIN LAYOUT ---- */
+        .main {
+            padding-top: calc(var(--nav-h) + 28px);
+            padding-bottom: 40px;
+            padding-left: 28px;
+            padding-right: 28px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ---- ANNOUNCEMENT BANNER ---- */
+        .announcement {
+            background: var(--surface);
+            border: 1px solid var(--green-mid);
+            border-left: 3px solid var(--green);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            animation: fadein 0.4s ease both;
+        }
+
+        .announcement.hidden {
+            display: none
+        }
+
+        .announcement-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px
+        }
+
+        .announcement-icon {
+            flex-shrink: 0;
+            margin-top: 1px
+        }
+
+        .announcement-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--green);
+            margin-bottom: 3px
+        }
+
+        .announcement-body {
+            font-size: 13px;
+            color: var(--grey);
+            line-height: 1.6;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .announcement-close {
+            background: none;
+            border: none;
+            color: var(--grey);
+            cursor: pointer;
+            padding: 2px;
+            flex-shrink: 0;
+            transition: color 0.2s;
+        }
+
+        .announcement-close:hover {
+            color: var(--white)
+        }
+
+        .page-header {
+            margin-bottom: 36px;
+            position: relative;
+        }
+
+        .page-greeting {
+            font-size: 14px;
+            color: var(--grey);
+            margin-bottom: 6px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 6vw, 48px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            filter: drop-shadow(0 2px 10px rgba(255,255,255,0.1));
+        }
+
+        .page-date {
+            font-size: 12px;
+            color: var(--grey2);
+            font-family: var(--font-mono);
+            margin-top: 4px
+        }
+
+        /* ---- PORTFOLIO CARDS ---- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        @media(max-width:1024px) {
+            .cards-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        @media(max-width:640px) {
+            .cards-grid {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        .pcard {
+            background: linear-gradient(180deg, rgba(24, 24, 27, 0.6) 0%, rgba(9, 9, 11, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .pcard:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: rgba(0, 229, 255, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 229, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .pcard::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--green), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .pcard:hover::after {
+            opacity: 1
+        }
+
+        .pcard-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pcard-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(0, 229, 255, 0.05));
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.15), inset 0 0 8px rgba(0, 229, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .pcard:hover .pcard-icon {
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.3), inset 0 0 12px rgba(0, 229, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .pcard-icon svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--green);
+            filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.5));
+        }
+
+        .pcard-value {
+            font-family: var(--font-mono);
+            font-size: clamp(18px, 2.5vw, 24px);
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            white-space: nowrap;
+        }
+
+        .pcard-sub {
+            font-size: 11px;
+            color: var(--grey2);
+            margin-top: 6px
+        }
+
+        .pcard.profit .pcard-value {
+            color: var(--green)
+        }
+
+        .pcard.loss .pcard-value {
+            color: var(--red)
+        }
+
+        /* ---- BOTTOM 2 SECTION ---- */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+            min-width: 0;
+        }
+
+        @media(max-width:900px) {
+            .bottom-grid {
+                grid-template-columns: 1fr;
+                min-width: 0;
+            }
+        }
+
+        /* ---- CHART CARD ---- */
+        .chart-card {
+            background: linear-gradient(180deg, rgba(24, 24, 27, 0.6) 0%, rgba(9, 9, 11, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .chart-card:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .chart-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .chart-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--white);
+            font-family: var(--font-display);
+        }
+
+        .chart-card-sub {
+            font-size: 13px;
+            color: var(--grey);
+            margin-top: 4px
+        }
+
+        .chart-wrap {
+            position: relative;
+            height: 240px;
+            width: 100%;
+        }
+
+        .txn-card {
+            background: linear-gradient(180deg, rgba(24, 24, 27, 0.6) 0%, rgba(9, 9, 11, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .txn-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .txn-title {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: var(--font-display);
+        }
+
+        .txn-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch
+        }
+
+        .txn-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 480px
+        }
+
+        .txn-table th {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 12px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .txn-table td {
+            padding: 14px 12px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .txn-table tr:last-child td {
+            border-bottom: none
+        }
+
+        .txn-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02)
+        }
+
+        .txn-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .txn-type-badge.deposit {
+            background: var(--green-dim);
+            color: var(--green)
+        }
+
+        .txn-type-badge.withdrawal {
+            background: var(--red-dim);
+            color: var(--red)
+        }
+
+        .txn-type-badge.bonus {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--gold)
+        }
+
+        .txn-type-badge.return_update {
+            background: rgba(161, 161, 170, 0.1);
+            color: var(--grey)
+        }
+
+        .txn-amount-pos {
+            color: var(--green);
+            font-family: var(--font-mono);
+            font-size: 13px
+        }
+
+        .txn-amount-neg {
+            color: var(--red);
+            font-family: var(--font-mono);
+            font-size: 13px
+        }
+
+        .txn-amount-neu {
+            color: var(--grey);
+            font-family: var(--font-mono);
+            font-size: 13px
+        }
+
+        .txn-date {
+            color: var(--grey);
+            font-family: var(--font-mono);
+            font-size: 12px
+        }
+
+        .txn-remark {
+            color: var(--grey);
+            font-size: 12px;
+            max-width: 160px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        /* empty state */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .empty-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--green-dim);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--white)
+        }
+
+        .empty-sub {
+            font-size: 13px;
+            color: var(--grey)
+        }
+
+        /* skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 6px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0
+            }
+
+            100% {
+                background-position: -200% 0
+            }
+        }
+
+        .skel-card {
+            height: 100px;
+            border-radius: 16px
+        }
+
+        .skel-row {
+            height: 48px;
+            border-radius: 6px;
+            margin-bottom: 8px
+        }
+
+        .skel-chart {
+            height: 220px;
+            border-radius: 10px
+        }
+
+        /* section label */
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border)
+        }
+
+        /* profile shortcut */
+        .profile-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: var(--white);
+            transition: all 0.2s;
+            margin-bottom: 28px;
+        }
+
+        .profile-link:hover {
+            border-color: var(--green-mid);
+            background: var(--surface2)
+        }
+
+        .profile-link-left {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        .profile-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 18px;
+            color: var(--green);
+            flex-shrink: 0;
+        }
+
+        .profile-link-name {
+            font-size: 14px;
+            font-weight: 600
+        }
+
+        .profile-link-sub {
+            font-size: 12px;
+            color: var(--grey);
+            font-family: var(--font-mono);
+            margin-top: 2px
+        }
+
+        .profile-link-arrow {
+            margin-left: auto;
+            color: var(--grey)
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .fadein {
+            animation: fadein 0.4s ease both
+        }
+
+        /* ---- BOTTOM NAV (MOBILE) ---- */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--bottom-nav-h);
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            z-index: 100;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 8px;
+        }
+
+        .bnav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            cursor: pointer;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 8px 0;
+            transition: all 0.2s;
+        }
+
+        .bnav-item svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--grey);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.2s
+        }
+
+        .bnav-item span {
+            font-size: 10px;
+            color: var(--grey);
+            font-family: var(--font-body);
+            transition: color 0.2s
+        }
+
+        .bnav-item.active svg {
+            stroke: var(--green)
+        }
+
+        .bnav-item.active span {
+            color: var(--green)
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media(max-width:768px) {
+            .topnav {
+                display: none
+            }
+
+            .bottom-nav {
+                display: flex
+            }
+
+            .main {
+                padding-top: 20px;
+                padding-bottom: calc(var(--bottom-nav-h) + 20px);
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px
+            }
+
+            .pcard {
+                padding: 16px
+            }
+
+            .pcard-value {
+                font-size: 18px
+            }
+
+            .chart-card, .txn-card {
+                padding: 16px;
+            }
+
+            .chart-card-header, .txn-header {
+                margin-bottom: 16px;
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+                gap: 16px
+            }
+
+            .nav-investor-info {
+                display: none
+            }
+
+            .nav-logout {
+                display: none
+            }
+        }
+
+        @media(max-width:360px) {
+            .cards-grid {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+
+    <!-- Mobile Performance Optimizations & Grid Fixes -->
+    <style>
+        @media (max-width: 768px) {
+            body::before, body::after { display: none !important; animation: none !important; }
+            .pcard:hover, .stat-card:hover, .card:hover, .pcard-icon, .stat-card-icon { transform: none !important; box-shadow: none !important; }
+            .btn-primary, .hero-visual::before, .hero-visual::after, .pulse-indicator { animation: none !important; }
+            html { scroll-behavior: auto !important; }
+        }
+        @media (max-width: 480px) {
+            /* Force all multi-column grids to 1 column on very small phones to prevent overflow */
+            .stats-grid, .cards-grid, .actions-grid, .two-col-grid, .form-row, .stats-row, .skeleton-stat-row { 
+                grid-template-columns: 1fr !important; 
+            }
+            .data-table-wrap, .txn-table-wrap, .table-wrap {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+        }
+    </style>
+    <!-- Load html2pdf for statements -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+    
+    <!-- Watermark -->
+    <div class="watermark">MUSKFUND</div>
+
+    <!-- TOP NAV -->
+    <nav class="topnav">
+        <a href="home.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 3v18h18" />
+                    <path d="m7 16 4-4 4 4 4-4" />
+                </svg>
+            </div>
+            <span class="nav-logo-text">MUSKFUND</span>
+        </a>
+        <div class="nav-right">
+            <div class="nav-investor-info">
+                <div class="nav-investor-name" id="navName">Loading...</div>
+                <div class="nav-investor-id" id="navId">MFH-000</div>
+            </div>
+            <a href="profile.html" class="nav-avatar" id="navAvatar">?</a>
+            <button class="nav-logout" onclick="signOut()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- BOTTOM NAV (MOBILE) -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="bnav-item active">
+            <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            <span>Overview</span>
+        </a>
+        <a href="#portfolio" class="bnav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18" />
+                <path d="m7 16 4-4 4 4 4-4" />
+            </svg>
+            <span>Portfolio</span>
+        </a>
+        <a href="#transactions" class="bnav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+            </svg>
+            <span>History</span>
+        </a>
+        <a href="profile.html" class="bnav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>Profile</span>
+        </a>
+        <button class="bnav-item" onclick="signOut()">
+            <svg viewBox="0 0 24 24">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span>Logout</span>
+        </button>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main" id="mainContent">
+
+        <!-- LOADING SKELETONS -->
+        <div id="skeletonView">
+            <div style="height:48px;margin-bottom:24px" class="skeleton" style="border-radius:10px"></div>
+            <div style="margin-bottom:28px">
+                <div style="height:32px;width:200px;margin-bottom:8px" class="skeleton"></div>
+                <div style="height:16px;width:120px" class="skeleton"></div>
+            </div>
+            <div class="cards-grid" style="margin-bottom:28px">
+                <div class="skeleton skel-card"></div>
+                <div class="skeleton skel-card"></div>
+                <div class="skeleton skel-card"></div>
+                <div class="skeleton skel-card"></div>
+                <div class="skeleton skel-card"></div>
+            </div>
+            <div class="bottom-grid">
+                <div class="skeleton skel-chart"></div>
+                <div>
+                    <div class="skeleton skel-row"></div>
+                    <div class="skeleton skel-row"></div>
+                    <div class="skeleton skel-row"></div>
+                    <div class="skeleton skel-row"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REAL CONTENT -->
+        <div id="realContent" style="display:none">
+
+            <!-- ANNOUNCEMENT -->
+            <div class="announcement hidden" id="announcementBanner">
+                <div class="announcement-left">
+                    <div class="announcement-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="announcement-title" id="announcementTitle"></div>
+                        <div class="announcement-body" id="announcementBody"></div>
+                    </div>
+                </div>
+                <button class="announcement-close" onclick="dismissAnnouncement()" aria-label="Dismiss">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- PROFILE SHORTCUT -->
+            <a href="profile.html" class="profile-link fadein" id="profileLink">
+                <div class="profile-link-left">
+                    <div class="profile-avatar" id="profileAvatar">?</div>
+                    <div>
+                        <div class="profile-link-name" id="profileName">Loading...</div>
+                        <div class="profile-link-sub" id="profileId">MFH-000</div>
+                    </div>
+                </div>
+                <div class="profile-link-arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </div>
+            </a>
+
+            <!-- PAGE HEADER -->
+            <div class="page-header fadein">
+                <div class="page-greeting" id="pageGreeting">Good morning</div>
+                <div class="page-title" id="pageTitle">MY PORTFOLIO</div>
+                <div class="page-date" id="pageDate"></div>
+            </div>
+
+            <!-- PORTFOLIO CARDS -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <div class="section-label" style="margin-bottom:0;">Portfolio Summary</div>
+                <button onclick="downloadStatement()" style="background:var(--surface2);color:var(--white);border:1px solid var(--border);padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity 0.2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Statement (PDF)
+                </button>
+            </div>
+            <div class="cards-grid" id="portfolioCards">
+                <!-- Invested -->
+                <div class="pcard fadein">
+                    <div class="pcard-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                        </svg>
+                    </div>
+                    <div class="pcard-label">Invested</div>
+                    <div class="pcard-value" id="cardInvested">—</div>
+                    <div class="pcard-sub">Total capital deployed</div>
+                </div>
+                <!-- Current Value -->
+                <div class="pcard fadein" style="animation-delay:0.05s">
+                    <div class="pcard-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M3 3v18h18" />
+                            <path d="m7 16 4-4 4 4 4-4" />
+                        </svg>
+                    </div>
+                    <div class="pcard-label">Current Value</div>
+                    <div class="pcard-value" id="cardCurrent">—</div>
+                    <div class="pcard-sub">As of today</div>
+                </div>
+                <!-- Profit/Loss -->
+                <div class="pcard fadein" style="animation-delay:0.1s" id="cardPLWrap">
+                    <div class="pcard-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                            <polyline points="17 6 23 6 23 12" />
+                        </svg>
+                    </div>
+                    <div class="pcard-label">Profit / Loss</div>
+                    <div class="pcard-value" id="cardPL">—</div>
+                    <div class="pcard-sub" id="cardPLSub">Net P&amp;L</div>
+                </div>
+                <!-- Growth -->
+                <div class="pcard fadein" style="animation-delay:0.15s" id="cardGrowthWrap">
+                    <div class="pcard-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        </svg>
+                    </div>
+                    <div class="pcard-label">Growth</div>
+                    <div class="pcard-value" id="cardGrowth">—</div>
+                    <div class="pcard-sub">Since investment</div>
+                </div>
+                <!-- Monthly Return -->
+                <div class="pcard fadein" style="animation-delay:0.2s">
+                    <div class="pcard-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                    </div>
+                    <div class="pcard-label">Monthly Return</div>
+                    <div class="pcard-value" id="cardMonthly">—</div>
+                    <div class="pcard-sub">Current month</div>
+                </div>
+            </div>
+
+            <!-- CHART + RECENT TXN -->
+            <div id="portfolio" class="bottom-grid">
+
+                <!-- CHART -->
+                <div class="chart-card fadein">
+                    <div class="chart-card-header">
+                        <div>
+                            <div class="chart-card-title">Portfolio Growth</div>
+                            <div class="chart-card-sub">Value over time from transactions</div>
+                        </div>
+                        <div style="font-family:var(--font-mono);font-size:11px;color:var(--green)">LIVE</div>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- QUICK STATS -->
+                <div class="chart-card fadein" style="animation-delay:0.1s">
+                    <div class="chart-card-header">
+                        <div>
+                            <div class="chart-card-title">Quick Stats</div>
+                            <div class="chart-card-sub">Portfolio at a glance</div>
+                        </div>
+                    </div>
+                    <div id="quickStats" style="display:flex;flex-direction:column;gap:0">
+                        <!-- filled by JS -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TRANSACTIONS TABLE -->
+            <div id="transactions">
+                <div class="section-label" style="margin-top:8px">Transaction History</div>
+                <div class="txn-card fadein">
+                    <div class="txn-header">
+                        <div class="chart-card-title">All Transactions</div>
+                        <div style="font-size:12px;color:var(--grey);font-family:var(--font-mono)" id="txnCount">0
+                            records</div>
+                    </div>
+                    <div class="txn-table-wrap">
+                        <table class="txn-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Portfolio Value</th>
+                                    <th>Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody id="txnBody">
+                                <!-- filled by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state hidden" id="txnEmpty">
+                        <div class="empty-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00e5ff"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                        </div>
+                        <div class="empty-title">No Transactions Yet</div>
+                        <div class="empty-sub">Your transaction history will appear here once your portfolio is active.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end realContent -->
+
+    </main>
+
+    <!-- PDF STATEMENT TEMPLATE (HIDDEN) -->
+    <div style="display:none;">
+        <div id="pdfTemplate" style="padding:40px; font-family:Arial, sans-serif; color:#000; background:#fff; width:800px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid #00e5ff; padding-bottom:10px; margin-bottom:30px;">
+                <div>
+                    <h1 style="color:#000; font-size:28px; margin:0; letter-spacing:1px;">MUSKFUND</h1>
+                    <div style="color:#666; font-size:12px; margin-top:4px;">Official Statement</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-weight:bold; font-size:14px;" id="pdfDate"></div>
+                </div>
+            </div>
+            
+            <h2 style="font-size:14px; color:#00e5ff; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Client Information</h2>
+            <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:30px;">
+                <table style="width:100%; font-size:14px;">
+                    <tr>
+                        <td style="width:120px; color:#555;">Name:</td>
+                        <td style="font-weight:bold;" id="pdfName"></td>
+                    </tr>
+                    <tr>
+                        <td style="color:#555; padding-top:8px;">Investor ID:</td>
+                        <td style="font-weight:bold; padding-top:8px;" id="pdfId"></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h2 style="font-size:14px; color:#00e5ff; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Portfolio Summary</h2>
+            <table style="width:100%; text-align:left; border-collapse:collapse; margin-bottom:30px; font-size:14px;">
+                <tr style="background:#f1f1f1;">
+                    <th style="padding:12px; border:1px solid #ddd;">Invested Amount</th>
+                    <th style="padding:12px; border:1px solid #ddd;">Current Value</th>
+                    <th style="padding:12px; border:1px solid #ddd;">Net Profit</th>
+                </tr>
+                <tr>
+                    <td style="padding:12px; border:1px solid #ddd; font-weight:bold;" id="pdfInvested"></td>
+                    <td style="padding:12px; border:1px solid #ddd; font-weight:bold;" id="pdfCurrent"></td>
+                    <td style="padding:12px; border:1px solid #ddd; font-weight:bold;" id="pdfProfit"></td>
+                </tr>
+            </table>
+
+            <h2 style="font-size:14px; color:#00e5ff; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Transaction History</h2>
+            <table style="width:100%; text-align:left; border-collapse:collapse; font-size:13px;">
+                <thead>
+                    <tr style="background:#f1f1f1;">
+                        <th style="padding:10px; border:1px solid #ddd;">Date</th>
+                        <th style="padding:10px; border:1px solid #ddd;">Type</th>
+                        <th style="padding:10px; border:1px solid #ddd;">Amount</th>
+                        <th style="padding:10px; border:1px solid #ddd;">Portfolio Value</th>
+                    </tr>
+                </thead>
+                <tbody id="pdfTxnBody">
+                </tbody>
+            </table>
+            
+            <div style="margin-top:50px; font-size:11px; color:#999; text-align:center; border-top:1px solid #eee; padding-top:20px;">
+                This is a computer-generated electronic statement and requires no physical signature.<br>
+                For any discrepancies, please contact MUSKFUND support.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let profileData = null;
+        let portfolioData = null;
+        let transactionsData = [];
+        let chartInstance = null;
+
+        // ---- GREETING ----
+        function getGreeting(fullName) {
+            const h = new Date().getHours();
+            const name = fullName ? fullName.split(' ')[0] : '';
+            const greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+            return name ? `${greeting}, ${name}` : greeting;
+        }
+
+        // ---- INITIALS ----
+        function getInitials(name) {
+            if (!name) return '?';
+            const parts = name.trim().split(' ');
+            if (parts.length === 1) return parts[0][0].toUpperCase();
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+
+        // ---- LOAD DATA ----
+        async function loadDashboard() {
+            const auth = await requireClient();
+            if (!auth) return;
+            const { session, profile } = auth;
+            profileData = profile;
+
+            // update nav
+            const initials = getInitials(profile.full_name);
+            document.getElementById('navName').textContent = profile.full_name || 'Investor';
+            document.getElementById('navId').textContent = profile.investor_id || 'MFH-000';
+            document.getElementById('profileName').textContent = profile.full_name || 'Investor';
+            document.getElementById('profileId').textContent = profile.investor_id || '';
+            document.getElementById('pageGreeting').textContent = getGreeting(profile.full_name);
+
+            if (profile.avatar_url) {
+                document.getElementById('navAvatar').innerHTML = '';
+                document.getElementById('navAvatar').style.backgroundImage = `url('${profile.avatar_url}?t=${Date.now()}')`;
+                document.getElementById('navAvatar').style.backgroundSize = 'cover';
+                document.getElementById('navAvatar').style.backgroundPosition = 'center';
+
+                document.getElementById('profileAvatar').innerHTML = '';
+                document.getElementById('profileAvatar').style.backgroundImage = `url('${profile.avatar_url}?t=${Date.now()}')`;
+                document.getElementById('profileAvatar').style.backgroundSize = 'cover';
+                document.getElementById('profileAvatar').style.backgroundPosition = 'center';
+            } else {
+                document.getElementById('navAvatar').textContent = initials;
+                document.getElementById('profileAvatar').textContent = initials;
+            }
+            document.getElementById('pageDate').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            // fetch portfolio
+            const { data: portfolio } = await db
+                .from('portfolios')
+                .select('*')
+                .eq('client_id', session.user.id)
+                .single();
+            portfolioData = portfolio;
+
+            // fetch transactions
+            const { data: txns } = await db
+                .from('transactions')
+                .select('*')
+                .eq('client_id', session.user.id)
+                .order('date', { ascending: true });
+            transactionsData = txns || [];
+
+            // fetch latest announcement
+            const { data: announcements } = await db
+                .from('announcements')
+                .select('*')
+                .eq('is_active', true)
+                .order('created_at', { ascending: false })
+                .limit(1);
+
+            // show announcement
+            if (announcements && announcements.length > 0) {
+                const ann = announcements[0];
+                const dismissed = sessionStorage.getItem('ann_dismissed_' + ann.id);
+                if (!dismissed) {
+                    document.getElementById('announcementTitle').textContent = ann.title;
+                    document.getElementById('announcementBody').textContent = ann.body;
+                    document.getElementById('announcementBanner').classList.remove('hidden');
+                    document.getElementById('announcementBanner')._annId = ann.id;
+                }
+            }
+
+            // render
+            renderCards();
+            renderQuickStats();
+            renderChart();
+            renderTransactions();
+
+            // show content
+            document.getElementById('skeletonView').style.display = 'none';
+            document.getElementById('realContent').style.display = 'block';
+        }
+
+        // ---- RENDER CARDS ----
+        function renderCards() {
+            if (!portfolioData) {
+                ['cardInvested', 'cardCurrent', 'cardPL', 'cardGrowth', 'cardMonthly'].forEach(id => {
+                    document.getElementById(id).textContent = '₹0.00';
+                });
+                return;
+            }
+            const inv = portfolioData.invested_amount || 0;
+            const cur = portfolioData.current_value || 0;
+            const pl = cur - inv;
+            const growth = inv > 0 ? (pl / inv) * 100 : 0;
+            const monthly = portfolioData.monthly_return || 0;
+
+            document.getElementById('cardInvested').textContent = '₹' + formatCurrency(inv);
+            document.getElementById('cardCurrent').textContent = '₹' + formatCurrency(cur);
+
+            const plEl = document.getElementById('cardPL');
+            plEl.textContent = getProfitPrefix(pl) + '₹' + formatCurrency(Math.abs(pl));
+            plEl.style.color = getProfitColor(pl);
+            document.getElementById('cardPLWrap').className = 'pcard fadein' + (pl >= 0 ? ' profit' : ' loss');
+
+            const gEl = document.getElementById('cardGrowth');
+            gEl.textContent = getProfitPrefix(growth) + growth.toFixed(2) + '%';
+            gEl.style.color = getProfitColor(growth);
+            document.getElementById('cardGrowthWrap').className = 'pcard fadein' + (growth >= 0 ? ' profit' : ' loss');
+
+            const mEl = document.getElementById('cardMonthly');
+            mEl.textContent = getProfitPrefix(monthly) + monthly.toFixed(2) + '%';
+            mEl.style.color = getProfitColor(monthly);
+        }
+
+        // ---- RENDER QUICK STATS ----
+        function renderQuickStats() {
+            const container = document.getElementById('quickStats');
+            if (!portfolioData) { container.innerHTML = '<div style="color:var(--grey);font-size:13px;padding:20px 0">No portfolio data yet.</div>'; return; }
+
+            const inv = portfolioData.invested_amount || 0;
+            const cur = portfolioData.current_value || 0;
+            const pl = cur - inv;
+            const growth = inv > 0 ? (pl / inv) * 100 : 0;
+
+            const stats = [
+                { label: 'Investment Date', value: portfolioData.investment_date ? formatDate(portfolioData.investment_date) : 'N/A', mono: true },
+                { label: 'Last Updated', value: portfolioData.last_updated ? formatDate(portfolioData.last_updated) : 'N/A', mono: true },
+                { label: 'Lock-in Period', value: portfolioData.lockin_period_months ? portfolioData.lockin_period_months + ' Months' : 'N/A', mono: true },
+                { label: 'Withdrawal Date', value: portfolioData.withdrawal_date ? formatDate(portfolioData.withdrawal_date) : 'N/A', mono: true, color: 'var(--gold)' },
+                { label: 'Total Transactions', value: transactionsData.length + ' records', mono: true },
+                { label: 'Absolute Return', value: getProfitPrefix(pl) + '₹' + formatCurrency(Math.abs(pl)), color: getProfitColor(pl), mono: true },
+                { label: '% Return', value: getProfitPrefix(growth) + growth.toFixed(2) + '%', color: getProfitColor(growth), mono: true },
+                { label: 'Account Status', value: profileData.is_active ? 'Active' : 'Suspended', color: profileData.is_active ? 'var(--green)' : 'var(--red)' },
+            ];
+
+            if (portfolioData.withdrawal_date) {
+                const wDate = new Date(portfolioData.withdrawal_date);
+                const today = new Date();
+                const diffTime = wDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                let remStr = diffDays > 0 ? diffDays + ' Days left' : 'Available Now';
+                let remColor = diffDays > 0 ? 'var(--white)' : 'var(--green)';
+                stats.splice(4, 0, { label: 'Lock-in Status', value: remStr, mono: true, color: remColor });
+            }
+
+            container.innerHTML = stats.map((s, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;${i < stats.length - 1 ? 'border-bottom:1px solid var(--border)' : ''}">
+      <span style="font-size:13px;color:var(--grey)">${s.label}</span>
+      <span style="font-size:13px;font-weight:500;color:${s.color || 'var(--white)'};${s.mono ? 'font-family:var(--font-mono)' : ''}">${s.value}</span>
+    </div>
+  `).join('');
+        }
+
+        // ---- RENDER CHART ----
+        function renderChart() {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+
+            let labels = [];
+            let values = [];
+
+            if (transactionsData.length > 0) {
+                transactionsData.forEach(t => {
+                    labels.push(formatDate(t.date));
+                    values.push(t.current_value_snapshot || 0);
+                });
+            } else if (portfolioData) {
+                labels = ['Start', 'Now'];
+                values = [portfolioData.invested_amount || 0, portfolioData.current_value || 0];
+            } else {
+                labels = ['No Data'];
+                values = [0];
+            }
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 220);
+            gradient.addColorStop(0, 'rgba(0, 229, 255, 0.4)');
+            gradient.addColorStop(1, 'rgba(0, 229, 255, 0.0)');
+
+            if (chartInstance) chartInstance.destroy();
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: values,
+                        borderColor: '#00e5ff',
+                        borderWidth: 3,
+                        backgroundColor: gradient,
+                        pointBackgroundColor: '#00e5ff',
+                        pointBorderColor: '#09090b',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#ffffff',
+                        pointHoverBorderColor: '#00e5ff',
+                        fill: true,
+                        tension: 0.4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#151820',
+                            borderColor: '#1E2530',
+                            borderWidth: 1,
+                            titleColor: '#8B95A1',
+                            bodyColor: '#FFFFFF',
+                            titleFont: { family: 'DM Mono', size: 11 },
+                            bodyFont: { family: 'DM Mono', size: 13 },
+                            callbacks: {
+                                label: ctx => '₹ ' + formatCurrency(ctx.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(30,37,48,0.8)', drawBorder: false },
+                            ticks: { color: '#8B95A1', font: { family: 'DM Mono', size: 10 }, maxRotation: 30 },
+                        },
+                        y: {
+                            grid: { color: 'rgba(30,37,48,0.8)', drawBorder: false },
+                            ticks: {
+                                color: '#8B95A1', font: { family: 'DM Mono', size: 10 },
+                                callback: v => '₹' + formatCurrency(v)
+                            },
+                            beginAtZero: false,
+                        }
+                    }
+                }
+            });
+        }
+
+        // ---- RENDER TRANSACTIONS ----
+        function renderTransactions() {
+            const tbody = document.getElementById('txnBody');
+            const empty = document.getElementById('txnEmpty');
+            const count = document.getElementById('txnCount');
+
+            count.textContent = transactionsData.length + ' record' + (transactionsData.length !== 1 ? 's' : '');
+
+            if (transactionsData.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+
+            // show newest first
+            const sorted = [...transactionsData].reverse();
+
+            tbody.innerHTML = sorted.map(t => {
+                const type = (t.type || '').toLowerCase().replace(/\s+/g, '_');
+                const typeLabel = t.type || 'Unknown';
+                let amtClass = 'txn-amount-neu';
+                let amtPrefix = '';
+                if (type === 'deposit' || type === 'bonus') { amtClass = 'txn-amount-pos'; amtPrefix = '+'; }
+                else if (type === 'withdrawal') { amtClass = 'txn-amount-neg'; amtPrefix = '-'; }
+
+                return `
+    <tr>
+      <td class="txn-date">${formatDate(t.date)}</td>
+      <td><span class="txn-type-badge ${type}">${typeLabel}</span></td>
+      <td class="${amtClass}">${amtPrefix}₹${formatCurrency(Math.abs(t.amount || 0))}</td>
+      <td style="font-family:var(--font-mono);font-size:13px;color:var(--white)">₹${formatCurrency(t.current_value_snapshot || 0)}</td>
+      <td class="txn-remark">${t.remark || '—'}</td>
+    </tr>`;
+            }).join('');
+        }
+
+        // ---- DISMISS ANNOUNCEMENT ----
+        function dismissAnnouncement() {
+            const banner = document.getElementById('announcementBanner');
+            const id = banner._annId;
+            if (id) sessionStorage.setItem('ann_dismissed_' + id, '1');
+            banner.classList.add('hidden');
+        }
+
+        async function downloadStatement() {
+            if (!profileData || !portfolioData) return;
+            
+            const btn = event.currentTarget;
+            const origText = btn.innerHTML;
+            btn.innerHTML = 'Generating...';
+            btn.disabled = true;
+
+            // Populate template
+            document.getElementById('pdfDate').textContent = 'Date: ' + new Date().toLocaleDateString('en-IN');
+            document.getElementById('pdfName').textContent = profileData.full_name || '—';
+            document.getElementById('pdfId').textContent = profileData.investor_id || '—';
+
+            const invested = parseFloat(portfolioData.invested_amount) || 0;
+            const current = parseFloat(portfolioData.current_value) || 0;
+            const pnl = current - invested;
+
+            document.getElementById('pdfInvested').textContent = formatCurrency(invested);
+            document.getElementById('pdfCurrent').textContent = formatCurrency(current);
+            document.getElementById('pdfProfit').textContent = (pnl > 0 ? '+' : '') + formatCurrency(pnl);
+
+            // Populate Txns
+            const tbody = document.getElementById('pdfTxnBody');
+            if (transactionsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="padding:10px; border:1px solid #ddd; text-align:center;">No transactions found.</td></tr>';
+            } else {
+                tbody.innerHTML = transactionsData.map(tx => {
+                    const amt = parseFloat(tx.amount) || 0;
+                    const val = parseFloat(tx.current_value_snapshot) || 0;
+                    const d = new Date(tx.date).toLocaleDateString('en-IN');
+                    return `
+                        <tr>
+                            <td style="padding:10px; border:1px solid #ddd;">${d}</td>
+                            <td style="padding:10px; border:1px solid #ddd; text-transform:capitalize;">${(tx.type || '').replace('_', ' ')}</td>
+                            <td style="padding:10px; border:1px solid #ddd; font-weight:bold; color:${tx.type === 'withdrawal' ? '#d32f2f' : '#2e7d32'}">${formatCurrency(amt)}</td>
+                            <td style="padding:10px; border:1px solid #ddd;">${formatCurrency(val)}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            const element = document.getElementById('pdfTemplate');
+            
+            // html2pdf options
+            const opt = {
+                margin:       0,
+                filename:     `MUSKFUND_Statement_${profileData.investor_id}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Generate
+            element.parentElement.style.display = 'block'; // Make wrapper visible to html2pdf briefly
+            try {
+                await html2pdf().set(opt).from(element).save();
+            } catch (err) {
+                console.error(err);
+                alert("Failed to generate PDF");
+            } finally {
+                element.parentElement.style.display = 'none';
+                btn.innerHTML = origText;
+                btn.disabled = false;
+            }
+        }
+
+        // ---- INIT ----
+        loadDashboard();
+    </script>
+</body>
+
+</html>

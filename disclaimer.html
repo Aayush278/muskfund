@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MUSKFUND — Disclaimer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #030712;
+            --surface: #0f172a;
+            --border: #334155;
+            --green: #00e5ff;
+            --green-dim: rgba(0, 229, 255, 0.1);
+            --green-mid: rgba(0, 229, 255, 0.3);
+            --white: #ffffff;
+            --grey: #94a3b8;
+            --grey2: #64748b;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        /* Ambient Mesh Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 60%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+            animation: float 15s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.03) 0%, rgba(0, 229, 255, 0.02) 40%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(100px);
+            animation: float 20s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, 5%) scale(1.1); }
+            100% { transform: translate(-5%, 8%) scale(0.95); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 64px;
+            background: rgba(13, 15, 20, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none
+        }
+
+        .nav-logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .nav-logo-text {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700; letter-spacing: 1px;
+            color: var(--white)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            color: var(--grey);
+            text-decoration: none;
+            transition: color 0.2s
+        }
+
+        .nav-links a:hover {
+            color: var(--green)
+        }
+
+        .nav-cta {
+            background: var(--green);
+            color: #0D0F14;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s
+        }
+
+        .nav-cta:hover {
+            background: #00c3d9
+        }
+
+        .hero {
+            padding: 120px 5% 60px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 11px;
+            color: var(--green);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px
+        }
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(48px, 7vw, 80px);
+            letter-spacing: -1px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            filter: drop-shadow(0 2px 10px rgba(255,255,255,0.1));
+        }
+
+        .hero-sub {
+            font-size: 15px;
+            color: var(--grey);
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.7
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+            flex-wrap: wrap
+        }
+
+        .hero-meta-item {
+            font-size: 12px;
+            color: var(--grey2);
+            font-family: var(--font-mono);
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .hero-meta-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--green)
+        }
+
+        .content {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 5% 80px
+        }
+
+        .section {
+            margin-bottom: 48px
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 28px;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            color: var(--white);
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .section p {
+            font-size: 15px;
+            color: var(--grey);
+            line-height: 1.8;
+            margin-bottom: 14px
+        }
+
+        .section p:last-child {
+            margin-bottom: 0
+        }
+
+        .section ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 8px
+        }
+
+        .section ul li {
+            font-size: 15px;
+            color: var(--grey);
+            line-height: 1.7;
+            padding-left: 20px;
+            position: relative
+        }
+
+        .section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            flex-shrink: 0
+        }
+
+        .warning-box {
+            background: rgba(240, 180, 41, 0.06);
+            border: 1px solid rgba(240, 180, 41, 0.2);
+            border-left: 3px solid #F0B429;
+            border-radius: 0 10px 10px 0;
+            padding: 20px 24px;
+            margin-bottom: 32px
+        }
+
+        .warning-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #F0B429;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px
+        }
+
+        .warning-box p {
+            font-size: 14px;
+            color: var(--grey);
+            line-height: 1.7;
+            margin: 0
+        }
+
+        .highlight-box {
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 32px
+        }
+
+        .highlight-box p {
+            font-size: 14px;
+            color: var(--grey);
+            line-height: 1.7;
+            margin: 0
+        }
+
+        .highlight-box strong {
+            color: var(--green)
+        }
+        .toc {
+            background: linear-gradient(180deg, rgba(24, 24, 27, 0.6) 0%, rgba(9, 9, 11, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+
+        .toc-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px
+        }
+
+        .toc-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .toc-links a {
+            font-size: 14px;
+            color: var(--grey);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+            padding: 4px 0
+        }
+
+        .toc-links a:hover {
+            color: var(--green)
+        }
+
+        .toc-links a::before {
+            content: '';
+            width: 16px;
+            height: 1px;
+            background: var(--border);
+            flex-shrink: 0;
+            transition: background 0.2s
+        }
+
+        .toc-links a:hover::before {
+            background: var(--green)
+        }
+
+        footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 40px 5%;
+            text-align: center
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 16px
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            color: var(--grey);
+            text-decoration: none;
+            transition: color 0.2s
+        }
+
+        .footer-links a:hover {
+            color: var(--green)
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--grey2)
+        }
+
+        @media(max-width:768px) {
+            .nav-links {
+                display: none
+            }
+
+            .hero {
+                padding: 100px 5% 40px
+            }
+        }
+    </style>
+
+    <!-- Mobile Performance Optimizations & Grid Fixes -->
+    <style>
+        @media (max-width: 768px) {
+            body::before, body::after { display: none !important; animation: none !important; }
+            .pcard:hover, .stat-card:hover, .card:hover, .pcard-icon, .stat-card-icon { transform: none !important; box-shadow: none !important; }
+            .btn-primary, .hero-visual::before, .hero-visual::after, .pulse-indicator { animation: none !important; }
+            html { scroll-behavior: auto !important; }
+        }
+        @media (max-width: 480px) {
+            /* Force all multi-column grids to 1 column on very small phones to prevent overflow */
+            .stats-grid, .cards-grid, .actions-grid, .two-col-grid, .form-row, .stats-row, .skeleton-stat-row { 
+                grid-template-columns: 1fr !important; 
+            }
+            .data-table-wrap, .txn-table-wrap, .table-wrap {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="home.html" class="nav-logo">
+            <div class="nav-logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 3v18h18" />
+                    <path d="m7 16 4-4 4 4 4-4" />
+                </svg></div>
+            <span class="nav-logo-text">MUSKFUND</span>
+        </a>
+        <div class="nav-links">
+            <a href="privacy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+        </div>
+        <a href="index.html" class="nav-cta">Investor Login</a>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-tag">Legal Document</div>
+        <h1 class="hero-title">DISCLAIMER</h1>
+        <p class="hero-sub">Important information about the nature of our services and the risks involved in portfolio
+            management.</p>
+        <div class="hero-meta">
+            <div class="hero-meta-item">
+                <div class="hero-meta-dot"></div>Effective: January 1, 2024
+            </div>
+            <div class="hero-meta-item">
+                <div class="hero-meta-dot"></div>Last Updated: January 1, 2025
+            </div>
+            <div class="hero-meta-item">
+                <div class="hero-meta-dot"></div>Jurisdiction: India
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="warning-box">
+            <div class="warning-box-title">Important Notice</div>
+            <p>Investments in securities and financial instruments are subject to market risks. Past performance does
+                not guarantee future results. Please read this disclaimer carefully before using our services or
+                investing your capital.</p>
+        </div>
+
+        <div class="toc">
+            <div class="toc-title">Table of Contents</div>
+            <div class="toc-links">
+                <a href="#general">General Disclaimer</a>
+                <a href="#investment">Investment Risk Disclaimer</a>
+                <a href="#returns">No Guaranteed Returns</a>
+                <a href="#information">Accuracy of Information</a>
+                <a href="#third-party">Third Party Services</a>
+                <a href="#liability">Limitation of Liability</a>
+                <a href="#regulatory">Regulatory Disclaimer</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+
+        <div class="section" id="general">
+            <div class="section-title">1. GENERAL DISCLAIMER</div>
+            <p>MUSKFUND ("we", "us", "our") operates as a private portfolio management service. The information
+                provided on this platform, including all dashboards, reports, charts, and communications, is for the
+                exclusive use of our registered investors and is intended for informational purposes only.</p>
+            <p>Nothing contained on this platform constitutes financial advice, investment advice, trading advice, or
+                any other form of advice. You should not treat any of the platform's content as such. We do not
+                recommend that any financial instrument should be bought, sold, or held by you.</p>
+            <p>All investment decisions are made by our portfolio management team on behalf of our investors in
+                accordance with agreed terms. By choosing to invest with us, you acknowledge that you have read,
+                understood, and accepted all risks associated with portfolio management.</p>
+        </div>
+
+        <div class="section" id="investment">
+            <div class="section-title">2. INVESTMENT RISK DISCLAIMER</div>
+            <p>All forms of investment carry risk. The value of your portfolio can go down as well as up. You may
+                receive back less than you originally invested. The following risks, among others, may affect your
+                investment:</p>
+            <ul>
+                <li>Market risk — the possibility that financial market conditions will cause the value of the portfolio
+                    to decline</li>
+                <li>Liquidity risk — the risk that an investment cannot be easily sold or converted to cash</li>
+                <li>Concentration risk — the risk associated with having a significant portion of the portfolio in a
+                    limited number of assets</li>
+                <li>Regulatory risk — changes in laws, regulations, or government policies that may affect investment
+                    performance</li>
+                <li>Currency risk — if investments are made across different currencies, exchange rate fluctuations may
+                    affect value</li>
+                <li>Economic risk — broad macroeconomic factors including inflation, recession, and interest rate
+                    changes</li>
+            </ul>
+            <p>Investors should carefully consider their investment objectives, risk appetite, and financial
+                circumstances before investing or continuing to invest with us.</p>
+        </div>
+
+        <div class="section" id="returns">
+            <div class="section-title">3. NO GUARANTEED RETURNS</div>
+            <p>Any figures, percentages, or return metrics shown on your investor dashboard represent historical
+                performance of your portfolio. These figures are not a guarantee, representation, or projection of
+                future results.</p>
+            <p>Any forward-looking statements, projections, or estimates of future returns are based on assumptions and
+                are subject to significant uncertainty. Actual results may differ materially from those projected.</p>
+            <div class="highlight-box">
+                <p><strong>No representation is made that any investor will or is likely to achieve profits or losses
+                        similar to those shown.</strong> Portfolio performance depends on market conditions, economic
+                    factors, and strategic decisions that cannot be predicted with certainty.</p>
+            </div>
+            <p>We do not promise, guarantee, or imply any specific level of return. Any discussion of expected returns
+                is purely illustrative and should not be relied upon as a forecast.</p>
+        </div>
+
+        <div class="section" id="information">
+            <div class="section-title">4. ACCURACY OF INFORMATION</div>
+            <p>While we make every effort to ensure that the information displayed on your portfolio dashboard is
+                accurate and up to date, we do not warrant the completeness, reliability, or accuracy of any information
+                provided on this platform.</p>
+            <p>Portfolio values are updated manually by our team and may not reflect real-time market conditions at all
+                times. There may be delays between market movements and the reflection of those changes in your
+                dashboard. We recommend contacting us directly via WhatsApp for the most current portfolio status.</p>
+            <p>We reserve the right to modify, update, or correct any information on this platform at any time without
+                prior notice.</p>
+        </div>
+
+        <div class="section" id="third-party">
+            <div class="section-title">5. THIRD PARTY SERVICES</div>
+            <p>Our platform uses third-party services including but not limited to Supabase for database and
+                authentication services. We are not responsible for the availability, accuracy, or reliability of any
+                third-party service.</p>
+            <p>Links to external websites or references to third-party services are provided for convenience only and do
+                not constitute an endorsement or approval of their content, policies, or services.</p>
+            <p>We are not liable for any loss or damage that may arise from your use of third-party services accessed
+                through or in connection with our platform.</p>
+        </div>
+
+        <div class="section" id="liability">
+            <div class="section-title">6. LIMITATION OF LIABILITY</div>
+            <p>To the maximum extent permitted by applicable law, MUSKFUND and its founder, team members, and
+                associates shall not be liable for any indirect, incidental, special, consequential, or punitive
+                damages, including but not limited to:</p>
+            <ul>
+                <li>Loss of profits or anticipated profits</li>
+                <li>Loss of data or information</li>
+                <li>Loss of business or investment opportunities</li>
+                <li>Any financial loss arising from reliance on information provided on this platform</li>
+                <li>Damages arising from unauthorized access to your account</li>
+                <li>Any loss arising from market movements or investment performance</li>
+            </ul>
+            <p>Our total liability to any investor shall not exceed the total amount invested by that investor with us
+                at the time of the relevant claim.</p>
+        </div>
+
+        <div class="section" id="regulatory">
+            <div class="section-title">7. REGULATORY DISCLAIMER</div>
+            <p>MUSKFUND operates as a private portfolio management arrangement between consenting parties.
+                Investors are advised that this service may not be regulated under all applicable financial services
+                regulations in India.</p>
+            <p>Before investing, investors are encouraged to seek independent legal and financial advice regarding the
+                regulatory status of this service and whether it is appropriate for their individual circumstances.</p>
+            <p>This platform is not intended for use by persons in any jurisdiction where such use would be contrary to
+                local laws or regulations. It is the responsibility of each investor to ensure compliance with
+                applicable laws in their jurisdiction.</p>
+        </div>
+
+        <div class="section" id="contact">
+            <div class="section-title">8. CONTACT</div>
+            <p>If you have any questions about this Disclaimer or our services, please contact us:</p>
+            <ul>
+                <li>Email: To Be Provided Later</li>
+                <li>WhatsApp: +91 9771534777</li>
+                <li>Response time: Within 24 hours on business days</li>
+            </ul>
+            <p>By continuing to use our platform and services, you acknowledge that you have read, understood, and agree
+                to be bound by this Disclaimer.</p>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="home.html">Home</a>
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="index.html">Investor Login</a>
+        </div>
+        <div class="footer-copy">© 2025 MUSKFUND. All rights reserved.</div>
+    </footer>
+
+</body>
+
+</html>

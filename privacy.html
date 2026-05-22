@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MUSKFUND — Privacy Policy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #030712;
+            --surface: #0f172a;
+            --border: #334155;
+            --green: #00e5ff;
+            --green-dim: rgba(0, 229, 255, 0.1);
+            --green-mid: rgba(0, 229, 255, 0.3);
+            --white: #ffffff;
+            --grey: #94a3b8;
+            --grey2: #64748b;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        /* Ambient Mesh Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 60%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+            animation: float 15s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.03) 0%, rgba(0, 229, 255, 0.02) 40%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(100px);
+            animation: float 20s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, 5%) scale(1.1); }
+            100% { transform: translate(-5%, 8%) scale(0.95); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 64px;
+            background: rgba(13, 15, 20, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none
+        }
+
+        .nav-logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .nav-logo-text {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700; letter-spacing: 1px;
+            color: var(--white)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            color: var(--grey);
+            text-decoration: none;
+            transition: color 0.2s
+        }
+
+        .nav-links a:hover {
+            color: var(--green)
+        }
+
+        .nav-cta {
+            background: var(--green);
+            color: #0D0F14;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s
+        }
+
+        .nav-cta:hover {
+            background: #00c3d9
+        }
+
+        .hero {
+            padding: 120px 5% 60px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 11px;
+            color: var(--green);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px
+        }
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(48px, 7vw, 80px);
+            letter-spacing: -1px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            filter: drop-shadow(0 2px 10px rgba(255,255,255,0.1));
+        }
+
+        .hero-sub {
+            font-size: 15px;
+            color: var(--grey);
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.7
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+            flex-wrap: wrap
+        }
+
+        .hero-meta-item {
+            font-size: 12px;
+            color: var(--grey2);
+            font-family: var(--font-mono);
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .hero-meta-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--green)
+        }
+
+        .content {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 5% 80px
+        }
+
+        .section {
+            margin-bottom: 48px
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 28px;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            color: var(--white);
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .section p {
+            font-size: 15px;
+            color: var(--grey);
+            line-height: 1.8;
+            margin-bottom: 14px
+        }
+
+        .section p:last-child {
+            margin-bottom: 0
+        }
+
+        .section ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 8px
+        }
+
+        .section ul li {
+            font-size: 15px;
+            color: var(--grey);
+            line-height: 1.7;
+            padding-left: 20px;
+            position: relative
+        }
+
+        .section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green)
+        }
+
+        .info-box {
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 32px
+        }
+
+        .info-box p {
+            font-size: 14px;
+            color: var(--grey);
+            line-height: 1.7;
+            margin: 0
+        }
+
+        .info-box strong {
+            color: var(--green)
+        }
+
+        .data-table-wrap {
+            overflow-x: auto;
+            margin: 16px 0 24px
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 480px
+        }
+
+        .data-table th {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface)
+        }
+
+        .data-table td {
+            font-size: 14px;
+            color: var(--grey);
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            line-height: 1.6
+        }
+
+        .data-table td:first-child {
+            color: var(--white);
+            font-weight: 500
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none
+        }
+        .toc {
+            background: linear-gradient(180deg, rgba(24, 24, 27, 0.6) 0%, rgba(9, 9, 11, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+
+        .toc-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px
+        }
+
+        .toc-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .toc-links a {
+            font-size: 14px;
+            color: var(--grey);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+            padding: 4px 0
+        }
+
+        .toc-links a:hover {
+            color: var(--green)
+        }
+
+        .toc-links a::before {
+            content: '';
+            width: 16px;
+            height: 1px;
+            background: var(--border);
+            flex-shrink: 0;
+            transition: background 0.2s
+        }
+
+        .toc-links a:hover::before {
+            background: var(--green)
+        }
+
+        footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 40px 5%;
+            text-align: center
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 16px
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            color: var(--grey);
+            text-decoration: none;
+            transition: color 0.2s
+        }
+
+        .footer-links a:hover {
+            color: var(--green)
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--grey2)
+        }
+
+        @media(max-width:768px) {
+            .nav-links {
+                display: none
+            }
+
+            .hero {
+                padding: 100px 5% 40px
+            }
+        }
+    </style>
+
+    <!-- Mobile Performance Optimizations & Grid Fixes -->
+    <style>
+        @media (max-width: 768px) {
+            body::before, body::after { display: none !important; animation: none !important; }
+            .pcard:hover, .stat-card:hover, .card:hover, .pcard-icon, .stat-card-icon { transform: none !important; box-shadow: none !important; }
+            .btn-primary, .hero-visual::before, .hero-visual::after, .pulse-indicator { animation: none !important; }
+            html { scroll-behavior: auto !important; }
+        }
+        @media (max-width: 480px) {
+            /* Force all multi-column grids to 1 column on very small phones to prevent overflow */
+            .stats-grid, .cards-grid, .actions-grid, .two-col-grid, .form-row, .stats-row, .skeleton-stat-row { 
+                grid-template-columns: 1fr !important; 
+            }
+            .data-table-wrap, .txn-table-wrap, .table-wrap {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="home.html" class="nav-logo">
+            <div class="nav-logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 3v18h18" />
+                    <path d="m7 16 4-4 4 4 4-4" />
+                </svg></div>
+            <span class="nav-logo-text">MUSKFUND</span>
+        </a>
+        <div class="nav-links">
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="terms.html">Terms</a>
+        </div>
+        <a href="index.html" class="nav-cta">Investor Login</a>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-tag">Legal Document</div>
+        <h1 class="hero-title">PRIVACY POLICY</h1>
+        <p class="hero-sub">How we collect, use, protect, and handle your personal information when you use our
+            platform.</p>
+        <div class="hero-meta">
+            <div class="hero-meta-item">
+                <div class="hero-meta-dot"></div>Effective: January 1, 2024
+            </div>
+            <div class="hero-meta-item">
+                <div class="hero-meta-dot"></div>Last Updated: January 1, 2025
+            </div>
+            <div class="hero-meta-item">
+                <div class="hero-meta-dot"></div>Jurisdiction: India
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="info-box">
+            <p><strong>Your privacy matters to us.</strong> MUSKFUND is committed to protecting your personal
+                information. We collect only what is necessary to provide our portfolio management service and never
+                sell or share your data with third parties for marketing purposes.</p>
+        </div>
+
+        <div class="toc">
+            <div class="toc-title">Table of Contents</div>
+            <div class="toc-links">
+                <a href="#collect">Information We Collect</a>
+                <a href="#use">How We Use Your Information</a>
+                <a href="#storage">Data Storage and Security</a>
+                <a href="#sharing">Information Sharing</a>
+                <a href="#retention">Data Retention</a>
+                <a href="#rights">Your Rights</a>
+                <a href="#cookies">Cookies and Tracking</a>
+                <a href="#children">Children's Privacy</a>
+                <a href="#changes">Changes to This Policy</a>
+                <a href="#contact">Contact Us</a>
+            </div>
+        </div>
+
+        <div class="section" id="collect">
+            <div class="section-title">1. INFORMATION WE COLLECT</div>
+            <p>We collect information you provide directly to us when you become an investor, as well as information
+                generated through your use of our platform.</p>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Data Type</th>
+                            <th>Examples</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Identity Information</td>
+                            <td>Full name, investor ID</td>
+                            <td>Account identification and dashboard personalization</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Information</td>
+                            <td>Email address, phone number</td>
+                            <td>Account access, communications, and support</td>
+                        </tr>
+                        <tr>
+                            <td>Financial Information</td>
+                            <td>Investment amounts, transaction history, portfolio values</td>
+                            <td>Portfolio management and performance reporting</td>
+                        </tr>
+                        <tr>
+                            <td>Account Credentials</td>
+                            <td>Email and encrypted password hash</td>
+                            <td>Secure platform access via Supabase authentication</td>
+                        </tr>
+                        <tr>
+                            <td>Usage Data</td>
+                            <td>Login timestamps, page access</td>
+                            <td>Security monitoring and platform improvement</td>
+                        </tr>
+                        <tr>
+                            <td>Communications</td>
+                            <td>WhatsApp messages, emails</td>
+                            <td>Customer support and investor relations</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>We do not collect sensitive personal information such as Aadhaar numbers, PAN card details, bank account
+                numbers, or biometric data through this platform.</p>
+        </div>
+
+        <div class="section" id="use">
+            <div class="section-title">2. HOW WE USE YOUR INFORMATION</div>
+            <p>We use the information we collect for the following purposes:</p>
+            <ul>
+                <li>To create and manage your investor account and portfolio dashboard</li>
+                <li>To process and record investment transactions, deposits, and withdrawals</li>
+                <li>To provide you with accurate, up-to-date portfolio performance data</li>
+                <li>To communicate important announcements, updates, and alerts</li>
+                <li>To respond to your inquiries and provide customer support</li>
+                <li>To maintain the security and integrity of our platform</li>
+                <li>To comply with applicable legal and regulatory obligations</li>
+                <li>To generate internal reports and analytics for improving our services</li>
+            </ul>
+            <p>We will not use your personal information for purposes other than those described above without your
+                prior consent.</p>
+        </div>
+
+        <div class="section" id="storage">
+            <div class="section-title">3. DATA STORAGE AND SECURITY</div>
+            <p>Your data is stored securely using Supabase, a PostgreSQL-based cloud database platform. All data is
+                encrypted in transit using TLS/SSL protocols. Passwords are never stored in plain text and are managed
+                through Supabase's authentication system using industry-standard hashing.</p>
+            <p>We implement Row Level Security (RLS) policies on our database, ensuring that each investor can only
+                access their own data. Administrative access is restricted to authorized personnel only and all admin
+                actions are logged in our audit system.</p>
+            <p>While we take commercially reasonable steps to protect your information, no method of transmission over
+                the internet or electronic storage is 100% secure. We cannot guarantee absolute security but are
+                committed to protecting your data using best practices.</p>
+            <ul>
+                <li>All data encrypted in transit via HTTPS/TLS</li>
+                <li>Database-level row security policies enforced</li>
+                <li>Admin actions logged with full audit trail</li>
+                <li>Session tokens expire automatically for security</li>
+                <li>No plain-text passwords stored anywhere</li>
+            </ul>
+        </div>
+
+        <div class="section" id="sharing">
+            <div class="section-title">4. INFORMATION SHARING</div>
+            <p>We do not sell, trade, rent, or transfer your personal information to third parties. Your data is never
+                shared with advertisers, data brokers, or marketing companies.</p>
+            <p>We may share your information only in the following limited circumstances:</p>
+            <ul>
+                <li>With Supabase as our infrastructure provider, solely for the purpose of operating our platform</li>
+                <li>When required by law, court order, or governmental authority</li>
+                <li>To protect the rights, property, or safety of MUSKFUND, our investors, or others</li>
+                <li>With your explicit written consent for any other purpose</li>
+            </ul>
+            <p>All third-party service providers we use are contractually obligated to handle your data only as
+                instructed by us and in accordance with applicable privacy laws.</p>
+        </div>
+
+        <div class="section" id="retention">
+            <div class="section-title">5. DATA RETENTION</div>
+            <p>We retain your personal information for as long as your investor account is active or as needed to
+                provide our services. Specifically:</p>
+            <ul>
+                <li>Account and profile data is retained for the duration of our business relationship</li>
+                <li>Transaction and portfolio history is retained for a minimum of 7 years for accounting and legal
+                    compliance purposes</li>
+                <li>Audit logs are retained for a minimum of 3 years</li>
+                <li>Upon account deletion, personal identifying information is removed, though anonymized transaction
+                    records may be retained for compliance purposes</li>
+            </ul>
+            <p>If you request deletion of your account, we will process your request within 30 days, subject to any
+                legal obligations that require us to retain certain data.</p>
+        </div>
+
+        <div class="section" id="rights">
+            <div class="section-title">6. YOUR RIGHTS</div>
+            <p>As an investor on our platform, you have the following rights with respect to your personal data:</p>
+            <ul>
+                <li>Right to Access — you may request a copy of all personal data we hold about you</li>
+                <li>Right to Correction — you may request that inaccurate personal data be corrected</li>
+                <li>Right to Deletion — you may request deletion of your account and associated personal data</li>
+                <li>Right to Portability — you may request your data in a structured, machine-readable format</li>
+                <li>Right to Object — you may object to certain uses of your personal data</li>
+                <li>Right to Withdraw Consent — where processing is based on consent, you may withdraw it at any time
+                </li>
+            </ul>
+            <p>To exercise any of these rights, please contact us via WhatsApp or email. We will respond to all requests
+                within 30 days.</p>
+        </div>
+
+        <div class="section" id="cookies">
+            <div class="section-title">7. COOKIES AND TRACKING</div>
+            <p>Our platform uses minimal cookies and local storage mechanisms solely for the purpose of maintaining your
+                authenticated session. We do not use advertising cookies, tracking pixels, or analytics tools that
+                report to third parties.</p>
+            <p>The session tokens stored in your browser are used exclusively to keep you logged in to your investor
+                dashboard. These are managed by Supabase's authentication system and expire automatically. You may clear
+                your browser's local storage at any time, which will log you out of the platform.</p>
+            <p>We do not use Google Analytics, Facebook Pixel, or any other third-party analytics or advertising
+                tracking tools on this platform.</p>
+        </div>
+
+        <div class="section" id="children">
+            <div class="section-title">8. CHILDREN'S PRIVACY</div>
+            <p>Our platform and services are not directed at individuals under the age of 18. We do not knowingly
+                collect personal information from minors. If you are a parent or guardian and believe that your child
+                has provided us with personal information, please contact us immediately and we will take steps to
+                delete such information.</p>
+        </div>
+
+        <div class="section" id="changes">
+            <div class="section-title">9. CHANGES TO THIS POLICY</div>
+            <p>We reserve the right to update or modify this Privacy Policy at any time. When we make changes, we will
+                update the "Last Updated" date at the top of this page and notify active investors via the platform's
+                announcement system.</p>
+            <p>Your continued use of our platform after any changes to this Privacy Policy constitutes your acceptance
+                of the updated policy. We encourage you to review this policy periodically.</p>
+        </div>
+
+        <div class="section" id="contact">
+            <div class="section-title">10. CONTACT US</div>
+            <p>If you have any questions, concerns, or requests related to this Privacy Policy or the handling of your
+                personal data, please contact us:</p>
+            <ul>
+                <li>Email: To Be Provided Later</li>
+                <li>WhatsApp: +91 9771534777</li>
+                <li>Response time: Within 30 days for privacy-related requests</li>
+            </ul>
+            <p>This Privacy Policy is governed by and construed in accordance with the laws of India, including the
+                Information Technology Act, 2000 and applicable rules thereunder.</p>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="home.html">Home</a>
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="index.html">Investor Login</a>
+        </div>
+        <div class="footer-copy">© 2025 MUSKFUND. All rights reserved.</div>
+    </footer>
+
+</body>
+
+</html>
