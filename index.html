@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>MUSKFUND — Investor Login</title>
-    <meta name="description" content="Secure investor login portal for MUSKFUND private portfolio management." />
+    <title>MUSKFUND — We Manage Your Portfolio</title>
+    <meta name="description"
+        content="India's most trusted private portfolio management firm. We manage your investments with precision, discipline, and data-driven strategy." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet" />
     <style>
         *,
         *::before,
@@ -23,13 +24,16 @@
             --bg: #030712;
             --surface: #0f172a;
             --surface2: #1e293b;
+            --surface3: #1e2535;
             --border: #334155;
+            --border2: #252d3d;
             --green: #00e5ff;
             --green-dim: rgba(0, 229, 255, 0.1);
             --green-mid: rgba(0, 229, 255, 0.3);
+            --green-glow: rgba(0, 229, 255, 0.15);
             --gold: #f59e0b;
+            --gold-dim: rgba(240, 180, 41, 0.12);
             --red: #ef4444;
-            --red-dim: rgba(239, 68, 68, 0.1);
             --white: #ffffff;
             --grey: #94a3b8;
             --grey2: #64748b;
@@ -38,24 +42,19 @@
             --font-mono: 'JetBrains Mono', monospace;
         }
 
-        html,
-        body {
-            height: 100%
+        html {
+            scroll-behavior: smooth
         }
 
         body {
             background: var(--bg);
             color: var(--white);
             font-family: var(--font-body);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
             overflow-x: hidden;
+            line-height: 1.6
         }
 
-        /* scrollbar */
+
         ::-webkit-scrollbar {
             width: 4px
         }
@@ -65,67 +64,897 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 2px
+            background: linear-gradient(180deg, var(--green), var(--gold));
+            border-radius: 2px;
+            box-shadow: 0 0 6px var(--green-glow);
         }
 
-        /* background effects */
-        .bg-glow {
+
+        nav {
             position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background:
-                radial-gradient(ellipse 70% 50% at 50% -10%, rgba(0, 229, 255, 0.09) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(0, 229, 255, 0.04) 0%, transparent 60%);
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            height: 72px;
+            background: rgba(13, 15, 20, 0.65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
         }
 
-        .bg-grid {
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none
+        }
+
+        .nav-logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+        }
+
+        .nav-logo-icon svg {
+            width: 20px;
+            height: 20px
+        }
+
+        .nav-logo-text {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--white)
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px
+        }
+
+        .nav-links a {
+            color: var(--grey);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s
+        }
+
+        .nav-links a:hover {
+            color: var(--white)
+        }
+
+        .nav-cta {
+            background: var(--green);
+            color: #0D0F14;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-cta:hover {
+            background: #00c3d9;
+            transform: translateY(-1px)
+        }
+
+        .nav-hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px
+        }
+
+        .nav-hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--white);
+            border-radius: 2px;
+            transition: all 0.3s
+        }
+
+        .mobile-menu {
+            display: none;
             position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.025;
-            background-image:
-                linear-gradient(var(--green) 1px, transparent 1px),
-                linear-gradient(90deg, var(--green) 1px, transparent 1px);
-            background-size: 48px 48px;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 5%;
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        /* wrapper */
-        .wrapper {
+        .mobile-menu a {
+            color: var(--grey);
+            text-decoration: none;
+            font-size: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            display: block;
+            transition: color 0.2s;
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+            color: var(--green);
+            font-weight: 600
+        }
+
+        .mobile-menu.open {
+            display: flex
+        }
+
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 5% 80px;
             position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 440px;
-            animation: fadein 0.45s ease both;
+            overflow: hidden;
         }
 
-        @keyframes fadein {
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 229, 255, 0.07) 0%, transparent 70%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: linear-gradient(var(--green) 1px, transparent 1px), linear-gradient(90deg, var(--green) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+
+        #particleCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @media(max-width: 900px) {
+            #particleCanvas {
+                display: none;
+            }
+        }
+
+
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(60px);
+            animation: orbFloat 10s ease-in-out infinite;
+        }
+
+        .hero-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.14) 0%, transparent 70%);
+            top: -80px;
+            right: 10%;
+            animation-duration: 12s;
+        }
+
+        .hero-orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(240, 180, 41, 0.09) 0%, transparent 70%);
+            bottom: 10%;
+            left: -60px;
+            animation-duration: 9s;
+            animation-delay: -4s;
+        }
+
+        .hero-orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 70%);
+            top: 40%;
+            left: 30%;
+            animation-duration: 14s;
+            animation-delay: -7s;
+        }
+
+        @keyframes orbFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(20px, -30px) scale(1.05);
+            }
+
+            66% {
+                transform: translate(-15px, 20px) scale(0.97);
+            }
+        }
+
+        @media(max-width:900px) {
+            .hero-orb {
+                display: none;
+            }
+        }
+
+
+        @keyframes heroFadeUp {
             from {
                 opacity: 0;
-                transform: translateY(20px)
+                transform: translateY(40px);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0)
+                transform: translateY(0);
             }
         }
 
-        /* logo */
-        .logo {
+        @keyframes heroScaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hero-badge {
+            animation: heroFadeUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+        }
+
+        .hero-title {
+            animation: heroFadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.25s both;
+        }
+
+        .hero-sub {
+            animation: heroFadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
+        }
+
+        .hero-actions {
+            animation: heroFadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.55s both;
+        }
+
+        .hero-stats {
+            animation: heroFadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.7s both;
+        }
+
+        .hero-visual {
+            animation: heroScaleIn 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+        }
+
+
+        .tw-cursor {
+            display: inline-block;
+            width: 3px;
+            background: var(--green);
+            margin-left: 4px;
+            border-radius: 2px;
+            animation: blink 0.9s step-end infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+
+        .hero-visual {
+            transition: transform 0.1s linear;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 680px
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            padding: 6px 14px;
+            border-radius: 100px;
+            margin-bottom: 28px;
+        }
+
+        .hero-badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: scale(0.85)
+            }
+        }
+
+        .hero-badge span {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--green);
+            letter-spacing: 1px;
+            text-transform: uppercase
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(52px, 8vw, 92px);
+            line-height: 0.95;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+        }
+
+        .hero-title .accent {
+            color: var(--green)
+        }
+
+        .hero-sub {
+            font-size: clamp(15px, 2vw, 18px);
+            color: var(--grey);
+            max-width: 520px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: #0D0F14;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .btn-primary:hover::after {
+            left: 150%;
+        }
+
+        .btn-primary:hover {
+            background: #00c3d9;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0, 229, 255, 0.35);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border);
+            color: var(--white);
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            background: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--green);
+            color: var(--green);
+            background: rgba(0, 229, 255, 0.05);
+            box-shadow: inset 0 0 16px rgba(0, 229, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 56px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .hero-stat-num {
+            font-family: var(--font-display);
+            font-size: 36px;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+
+        .hero-stat-label {
+            font-size: 12px;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px
+        }
+
+        .hero-visual {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: min(420px, 40vw);
+            z-index: 1;
+            transform-style: preserve-3d;
+            perspective: 1200px;
+        }
+
+        @media(max-width:900px) {
+            .hero-visual {
+                display: none
+            }
+        }
+
+        .mock-card {
+            background: rgba(18, 21, 28, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            animation: floatup 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes floatup {
+
+            0%,
+            100% {
+                transform: translateY(0) translateZ(40px);
+            }
+
+            50% {
+                transform: translateY(-15px) translateZ(40px);
+            }
+        }
+
+        .mock-card:nth-child(2) {
+            animation-delay: -3s;
+            margin-left: 32px;
+            animation-name: floatup2;
+        }
+
+        @keyframes floatup2 {
+
+            0%,
+            100% {
+                transform: translateY(0) translateZ(80px);
+            }
+
+            50% {
+                transform: translateY(-15px) translateZ(80px);
+            }
+        }
+
+        .mock-label {
+            font-size: 11px;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px
+        }
+
+        .mock-value {
+            font-family: var(--font-display);
+            font-size: 28px;
+            color: var(--green)
+        }
+
+        .mock-sub {
+            font-size: 12px;
+            color: var(--green);
+            margin-top: 4px
+        }
+
+        .mock-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden
+        }
+
+        .mock-bar-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 2px;
+            width: 68%;
+            animation: barload 2s ease-out forwards
+        }
+
+        @keyframes barload {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 68%
+            }
+        }
+
+
+        section {
+            padding: 100px 5%
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .section-tag::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--green)
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 5vw, 60px);
+            line-height: 1;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .section-sub {
+            font-size: 16px;
+            color: var(--grey);
+            max-width: 560px;
+            line-height: 1.7
+        }
+
+
+        .about {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center
+        }
+
+        @media(max-width:768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 48px
+            }
+        }
+
+        .about-points {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px
+        }
+
+        .about-point {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start
+        }
+
+        .about-point-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
+            border: 1px solid var(--green-mid);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 32px;
-            text-decoration: none;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
         }
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
+        .about-point-icon svg {
+            width: 18px;
+            height: 18px
+        }
+
+        .about-point-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px
+        }
+
+        .about-point-desc {
+            font-size: 14px;
+            color: var(--grey);
+            line-height: 1.6
+        }
+
+        .about-visual {
+            position: relative
+        }
+
+        .about-card-main {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+        }
+
+        .about-card-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .about-card-stat:last-child {
+            border-bottom: none;
+            padding-bottom: 0
+        }
+
+        .about-card-stat-label {
+            font-size: 13px;
+            color: var(--grey)
+        }
+
+        .about-card-stat-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--green);
+            font-family: var(--font-mono)
+        }
+
+        .about-card-badge {
+            position: absolute;
+            top: -16px;
+            right: -16px;
+            background: var(--green);
+            color: #0D0F14;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media(max-width:768px) {
+            .about-card-badge {
+                top: -10px;
+                right: 0
+            }
+        }
+
+
+        .founder-wrap {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 60px;
+            align-items: start
+        }
+
+        @media(max-width:768px) {
+            .founder-wrap {
+                grid-template-columns: 1fr;
+                gap: 40px
+            }
+        }
+
+        .founder-photo {
+            width: 220px;
+            height: 280px;
+            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        @media(max-width:768px) {
+            .founder-photo {
+                width: 100%;
+                height: 200px
+            }
+        }
+
+        .founder-photo img:hover {
+            filter: grayscale(0%) contrast(1.1) !important;
+        }
+
+        .founder-tag {
+            display: inline-block;
+            background: var(--green-dim);
+            border: 1px solid var(--green-mid);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--green);
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .founder-name {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 4vw, 52px);
+            letter-spacing: 2px;
+            g margin-bottom: 8px
+        }
+
+        .founder-role {
+            font-size: 14px;
+            color: var(--grey);
+            margin-bottom: 24px;
+            font-family: var(--font-mono)
+        }
+
+        .founder-bio {
+            font-size: 15px;
+            color: var(--grey);
+            line-height: 1.8;
+            max-width: 600px
+        }
+
+        .founder-bio p {
+            margin-bottom: 14px
+        }
+
+        .founder-bio p:last-child {
+            margin-bottom: 0
+        }
+
+        .founder-quote {
+            margin-top: 28px;
+            padding: 20px 24px;
+            border-left: 3px solid var(--green);
+            background: var(--surface);
+            border-radius: 0 8px 8px 0;
+            font-size: 15px;
+            color: var(--white);
+            font-style: italic;
+            line-height: 1.7;
+        }
+
+
+        .hiw {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .hiw-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            margin-top: 64px;
+            border-radius: 16px;
+            overflow: hidden
+        }
+
+        @media(max-width:768px) {
+            .hiw-steps {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:480px) {
+            .hiw-steps {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .hiw-step {
+            background: var(--surface);
+            padding: 32px 24px;
+            position: relative;
+            transition: background 0.2s
+        }
+
+        .hiw-step:hover {
+            background: var(--surface2)
+        }
+
+        .hiw-step-num {
+            font-family: var(--font-display);
+            font-size: 48px;
+            color: var(--border);
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .hiw-step-icon {
+            width: 44px;
+            height: 44px;
             border-radius: 10px;
             background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
             border: 1px solid var(--green-mid);
@@ -133,53 +962,292 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
-            flex-shrink: 0;
+            margin-bottom: 16px;
         }
 
-        .logo-text {
-            font-family: var(--font-display);
-            font-size: 24px;
-            letter-spacing: 2px;
-            color: var(--white);
+        .hiw-step-icon svg {
+            width: 20px;
+            height: 20px
         }
 
-        /* card */
-        .card {
-            background: var(--surface);
+        .hiw-step-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px
+        }
+
+        .hiw-step-desc {
+            font-size: 13px;
+            color: var(--grey);
+            line-height: 1.6
+        }
+
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 64px
+        }
+
+        @media(max-width:900px) {
+            .why-grid {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:560px) {
+            .why-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .why-card {
+            background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px 36px;
-            box-shadow: 0 0 60px rgba(0, 229, 255, 0.05), 0 24px 48px rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            padding: 28px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .card::before {
+        .why-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--green-mid), transparent);
+            height: 2px;
+            background: linear-gradient(90deg, var(--green), var(--gold));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
         }
 
-        @media(max-width:480px) {
-            .card {
-                padding: 32px 24px;
-                border-radius: 16px
+        .why-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, var(--green-glow) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.35s;
+            pointer-events: none;
+        }
+
+        .why-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .why-card:hover::after {
+            opacity: 1;
+        }
+
+        .why-card:hover {
+            border-color: var(--green-mid);
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .why-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
+            border: 1px solid var(--green-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s;
+        }
+
+        .why-card:hover .why-icon {
+            box-shadow: 0 0 16px var(--green-glow);
+        }
+
+        .why-icon svg {
+            width: 22px;
+            height: 22px
+        }
+
+        .why-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--white);
+        }
+
+        .why-desc {
+            font-size: 13px;
+            color: var(--grey);
+            line-height: 1.7
+        }
+
+
+        .perf {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .perf-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            margin-top: 64px;
+            border-radius: 16px;
+            overflow: hidden
+        }
+
+        @media(max-width:768px) {
+            .perf-grid {
+                grid-template-columns: 1fr 1fr
             }
         }
 
-        /* card header */
-        .card-header {
+        .perf-card {
+            background: var(--surface);
+            padding: 36px 28px;
             text-align: center;
-            margin-bottom: 32px
+            transition: background 0.25s;
+            position: relative;
         }
 
-        .card-icon {
-            width: 60px;
-            height: 60px;
+        .perf-card:hover {
+            background: var(--surface2);
+            transform: translateY(-4px);
+            box-shadow: inset 0 0 30px rgba(0, 229, 255, 0.08);
+        }
+
+        .perf-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: var(--green);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .perf-card:hover::before {
+            opacity: 1;
+        }
+
+        .perf-num {
+            font-family: var(--font-display);
+            font-size: 56px;
+            color: var(--green);
+            letter-spacing: 2px;
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(0, 229, 255, 0.35);
+        }
+
+        .perf-label {
+            font-size: 12px;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px
+        }
+
+        .perf-sub {
+            font-size: 11px;
+            color: var(--grey2);
+            margin-top: 4px
+        }
+
+        .counter {
+            display: inline-block
+        }
+
+
+        .testi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 64px
+        }
+
+        @media(max-width:900px) {
+            .testi-grid {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:560px) {
+            .testi-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .testi-card {
+            background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .testi-card:hover {
+            border-color: var(--green);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.08), inset 0 0 20px rgba(0, 229, 255, 0.05);
+        }
+
+        .testi-card::before {
+            content: '\201C';
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-family: Georgia, serif;
+            font-size: 80px;
+            line-height: 1;
+            color: var(--green);
+            opacity: 0.07;
+            pointer-events: none;
+        }
+
+        .testi-stars {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px
+        }
+
+        .testi-star {
+            width: 14px;
+            height: 14px;
+            color: var(--gold)
+        }
+
+        .testi-text {
+            font-size: 14px;
+            color: var(--grey);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testi-author {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        .testi-avatar {
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
             border: 1px solid var(--green-mid);
@@ -187,61 +1255,151 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
-            margin: 0 auto 20px;
-        }
-
-        .card-title {
-            font-family: var(--font-display);
-            font-size: 32px;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .card-sub {
-            font-size: 14px;
-            color: var(--grey);
-            line-height: 1.6
-        }
-
-        /* suspended banner */
-        .suspended-banner {
-            display: none;
-            background: var(--red-dim);
-            border: 1px solid rgba(255, 77, 77, 0.25);
-            border-radius: 10px;
-            padding: 14px 16px;
-            margin-bottom: 20px;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .suspended-banner.show {
-            display: flex
-        }
-
-        .suspended-banner-icon {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--green);
+            font-family: var(--font-mono);
             flex-shrink: 0;
-            margin-top: 1px
         }
 
-        .suspended-banner-text {
-            font-size: 13px;
-            color: #ff8080;
-            line-height: 1.6
-        }
-
-        .suspended-banner-title {
+        .testi-name {
+            font-size: 14px;
             font-weight: 600;
-            color: var(--red);
-            margin-bottom: 2px;
-            font-size: 13px
+            color: var(--white);
         }
 
-        /* form */
-        .form {
+        .testi-id {
+            font-size: 11px;
+            color: var(--grey);
+            font-family: var(--font-mono)
+        }
+
+
+        .faq-list {
+            margin-top: 64px;
             display: flex;
             flex-direction: column;
-            gap: 20px
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none
+        }
+
+        .faq-item.open {
+            background: var(--surface2);
+        }
+
+        .faq-q {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--white);
+            padding: 22px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            font-weight: 500;
+            font-family: var(--font-body);
+            transition: color 0.2s;
+            gap: 16px;
+        }
+
+        .faq-q:hover {
+            color: var(--white);
+        }
+
+        .faq-item.open .faq-q {
+            color: var(--green);
+        }
+
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            background: var(--surface3);
+        }
+
+        .faq-icon svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s, stroke 0.3s;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--green-dim);
+            border-color: var(--green-mid);
+            box-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .faq-item.open .faq-icon svg {
+            transform: rotate(45deg);
+            stroke: var(--green);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: transparent;
+        }
+
+        .faq-a-inner {
+            padding: 4px 28px 24px;
+            font-size: 14px;
+            color: var(--grey);
+            line-height: 1.8;
+            border-left: 2px solid var(--green-mid);
+            margin: 0 28px 20px;
+            padding: 0 0 0 16px;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 300px
+        }
+
+
+        .contact {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start
+        }
+
+        @media(max-width:768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 48px
+            }
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px
         }
 
         .form-group {
@@ -251,227 +1409,78 @@
         }
 
         .form-label {
-            font-size: 11px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 500;
             color: var(--grey);
-            text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .input-wrap {
-            position: relative
+            text-transform: uppercase
         }
 
         .form-input {
-            width: 100%;
             background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 13px 16px;
+            border-radius: 8px;
+            padding: 12px 16px;
             color: var(--white);
             font-size: 15px;
             font-family: var(--font-body);
+            transition: border-color 0.2s;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            -webkit-appearance: none;
         }
 
         .form-input:focus {
-            border-color: var(--green);
-            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.08);
+            border-color: var(--green)
         }
 
         .form-input::placeholder {
             color: var(--grey2)
         }
 
-        .form-input.error {
-            border-color: var(--red)
+        textarea.form-input {
+            resize: vertical;
+            min-height: 120px
         }
 
-        .form-input.error:focus {
-            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.08)
-        }
-
-        /* password toggle */
-        .pw-toggle {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--grey);
-            padding: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.2s;
-        }
-
-        .pw-toggle:hover {
-            color: var(--white)
-        }
-
-        /* field error */
-        .field-error {
-            display: none;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--red);
-            margin-top: 2px;
-        }
-
-        .field-error.show {
-            display: flex
-        }
-
-        /* forgot password */
-        .forgot-row {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: -8px;
-        }
-
-        .forgot-link {
-            font-size: 13px;
-            color: var(--grey);
-            text-decoration: none;
-            transition: color 0.2s;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-family: var(--font-body);
-            padding: 0;
-        }
-
-        .forgot-link:hover {
-            color: var(--green)
-        }
-
-        /* submit */
-        .btn-submit {
-            width: 100%;
+        .form-submit {
             background: var(--green);
             color: #0D0F14;
             border: none;
-            border-radius: 10px;
-            padding: 14px;
+            padding: 14px 32px;
+            border-radius: 8px;
             font-size: 15px;
             font-weight: 700;
-            font-family: var(--font-body);
             cursor: pointer;
+            font-family: var(--font-body);
             transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-top: 4px;
         }
 
-        .btn-submit:hover:not(:disabled) {
+        .form-submit:hover {
             background: #00c3d9;
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(0, 229, 255, 0.25);
+            transform: translateY(-1px)
         }
 
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none
-        }
-
-        /* global error */
-        .global-error {
-            display: none;
-            background: var(--red-dim);
-            border: 1px solid rgba(255, 77, 77, 0.2);
-            border-radius: 10px;
-            padding: 12px 16px;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            color: #ff8080;
-        }
-
-        .global-error.show {
-            display: flex
-        }
-
-        /* divider */
-        .divider {
+        .contact-info {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 4px 0;
-        }
-
-        .divider-line {
-            flex: 1;
-            height: 1px;
-            background: var(--border)
-        }
-
-        .divider-text {
-            font-size: 12px;
-            color: var(--grey2)
-        }
-
-        /* forgot password panel */
-        .forgot-panel {
-            display: none;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
+            padding-top: 8px
         }
 
-        .forgot-panel.active {
-            display: flex
-        }
-
-        .form.hidden {
-            display: none
-        }
-
-        .back-btn {
+        .contact-item {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            background: none;
-            border: none;
-            color: var(--grey);
-            cursor: pointer;
-            font-size: 13px;
-            font-family: var(--font-body);
-            padding: 0;
-            transition: color 0.2s;
-            margin-bottom: 4px;
-            width: fit-content;
-        }
-
-        .back-btn:hover {
-            color: var(--white)
-        }
-
-        /* success state */
-        .success-state {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
             gap: 16px;
-            padding: 20px 0;
+            align-items: flex-start
         }
 
-        .success-state.show {
-            display: flex
-        }
-
-        .success-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
+        .contact-item-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 10px;
             background: linear-gradient(135deg, var(--green-mid), var(--green-dim));
             border: 1px solid var(--green-mid);
             display: flex;
@@ -480,101 +1489,587 @@
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
         }
 
-        .success-title {
-            font-family: var(--font-display);
-            font-size: 28px;
+        .contact-item-icon svg {
+            width: 20px;
+            height: 20px
+        }
+
+        .contact-item-label {
+            font-size: 12px;
+            color: var(--grey);
+            margin-bottom: 4px;
+            text-transform: uppercase;
             letter-spacing: 1px
         }
 
-        .success-sub {
-            font-size: 14px;
-            color: var(--grey);
-            line-height: 1.6;
-            max-width: 280px
+        .contact-item-value {
+            font-size: 15px;
+            font-weight: 500
         }
 
-        /* spinner */
-        @keyframes spin {
-            to {
-                transform: rotate(360deg)
-            }
-        }
 
-        .spinner {
-            animation: spin 0.8s linear infinite;
-            display: inline-block
-        }
-
-        /* footer note */
-        .footer-note {
+        .wa-section {
+            padding: 120px 5%;
             text-align: center;
-            margin-top: 24px;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .wa-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .wa-grid {
+            position: absolute;
+            inset: 0;
+            opacity: 0.025;
+            background-image: linear-gradient(var(--green) 1px, transparent 1px),
+                linear-gradient(90deg, var(--green) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .wa-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             font-size: 12px;
-            color: var(--grey2);
-            line-height: 1.6;
+            font-weight: 500;
+            color: var(--green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
         }
 
-        .footer-note a {
+        .wa-eyebrow::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--green);
+        }
+
+        .wa-eyebrow::after {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--green);
+        }
+
+        .wa-headline {
+            font-family: var(--font-display);
+            font-size: clamp(52px, 9vw, 110px);
+            line-height: 0.92;
+            letter-spacing: 2px;
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wa-headline .line-accent {
+            background: linear-gradient(90deg, #F0B429 0%, #00e5ff 60%, #00c3d9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .wa-sub {
+            font-size: clamp(15px, 2vw, 18px);
             color: var(--grey);
+            max-width: 520px;
+            margin: 0 auto 44px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wa-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 48px;
+        }
+
+        .btn-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #25D366;
+            color: #fff;
+            padding: 16px 36px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
             text-decoration: none;
-            transition: color 0.2s
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
         }
 
-        .footer-note a:hover {
-            color: var(--green)
+        .btn-wa:hover {
+            background: #1ebe5c;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 32px rgba(37, 211, 102, 0.3);
         }
 
-        /* mobile full screen feel */
+        .btn-wa-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            color: var(--white);
+            padding: 16px 36px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .btn-wa-outline:hover {
+            border-color: var(--green);
+            color: var(--green);
+            transform: translateY(-2px);
+        }
+
+        .wa-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wa-badge {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--grey);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .wa-badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .wa-badge-dot.green {
+            background: var(--green);
+        }
+
+        .wa-badge-dot.gold {
+            background: var(--gold);
+        }
+
+
+        footer {
+            background: #0a0c10;
+            border-top: 1px solid var(--border);
+            padding: 72px 5% 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 320px;
+            background: radial-gradient(ellipse 60% 40% at 50% 100%, rgba(0, 229, 255, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr 1fr 1fr 1.6fr;
+            gap: 48px;
+            padding-bottom: 56px;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media(max-width:1100px) {
+            .footer-main {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        @media(max-width:720px) {
+            .footer-main {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+        }
+
         @media(max-width:480px) {
-            body {
-                padding: 0;
-                align-items: flex-start
+            .footer-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-col-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            font-size: 13.5px;
+            color: #6b7280;
+            text-decoration: none;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+
+        .footer-subscribe-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .footer-subscribe-desc {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-subscribe-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-email-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #111318;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        .footer-email-wrap svg {
+            flex-shrink: 0;
+            stroke: #6b7280;
+        }
+
+        .footer-email-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: var(--font-body);
+            font-size: 13px;
+            color: var(--white);
+            width: 100%;
+        }
+
+        .footer-email-input::placeholder {
+            color: #6b7280;
+        }
+
+        .footer-submit-btn {
+            background: var(--green);
+            color: #0D0F14;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 20px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .footer-submit-btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+
+        .footer-watermark {
+            font-family: var(--font-display);
+            font-size: clamp(56px, 10vw, 120px);
+            letter-spacing: 8px;
+            text-align: center;
+            line-height: 1;
+            user-select: none;
+            pointer-events: none;
+            white-space: nowrap;
+            overflow: hidden;
+            padding: 0;
+            background: linear-gradient(90deg, rgba(0, 229, 255, 0.1) 0%, rgba(0, 230, 174, 0.3) 25%, rgba(240, 180, 41, 0.3) 50%, rgba(0, 230, 174, 0.3) 75%, rgba(0, 229, 255, 0.1) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: watermarkGradient 8s linear infinite;
+        }
+
+        @keyframes watermarkGradient {
+            0% {
+                background-position: 0% center;
             }
 
-            .wrapper {
-                max-width: 100%;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                padding: 24px 16px
+            100% {
+                background-position: -200% center;
+            }
+        }
+
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding: 20px 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .footer-disclaimer {
+            font-size: 11px;
+            color: #4a5260;
+            max-width: 440px;
+            text-align: right;
+            line-height: 1.5;
+        }
+
+        @media(max-width:560px) {
+            .footer-disclaimer {
+                text-align: left;
+            }
+        }
+
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(36px) scale(0.97);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: 0.1s
+        }
+
+        .reveal-delay-2 {
+            transition-delay: 0.2s
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 0.3s
+        }
+
+        .reveal-delay-4 {
+            transition-delay: 0.45s
+        }
+
+        .reveal-delay-5 {
+            transition-delay: 0.55s
+        }
+
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 229, 255, 0);
             }
 
-            .logo {
-                margin-bottom: 28px
+            50% {
+                box-shadow: 0 0 28px 8px rgba(0, 229, 255, 0.28);
+            }
+        }
+
+        .btn-primary {
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+
+        @keyframes borderSpin {
+            from {
+                background-position: 0% 50%;
             }
 
-            .card {
-                border-left: none;
-                border-right: none;
-                border-radius: 0;
-                box-shadow: none;
-                border-top: none;
-                border-bottom: none;
-                background: var(--surface);
-                padding: 28px 20px;
+            to {
+                background-position: 200% 50%;
+            }
+        }
+
+        .hero-badge {
+            background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                linear-gradient(90deg, var(--green), var(--gold), var(--green)) border-box;
+            background-size: 200% auto;
+            animation: borderSpin 4s linear infinite;
+            border: 1px solid transparent;
+        }
+
+
+        .hero-stat-num {
+            transition: color 0.3s;
+        }
+
+        .hero-stat-num:hover {
+            color: var(--green);
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+        }
+
+
+        .why-card,
+        .hiw-step {
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.4s, box-shadow 0.4s;
+        }
+
+        .why-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--green);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.1), inset 0 0 20px rgba(0, 229, 255, 0.05);
+        }
+
+        .hiw-step:hover {
+            transform: translateY(-6px);
+            border-color: var(--green);
+            box-shadow: 0 16px 32px rgba(0, 229, 255, 0.1), inset 0 0 20px rgba(0, 229, 255, 0.05);
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
             }
 
-            .card::before {
-                display: none
+            100% {
+                background-position: 200% center;
             }
+        }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, var(--green) 0%, #00c3d9 40%, var(--gold) 60%, var(--green) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--green);
+            transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .section-title.visible::after {
+            width: 100%;
         }
     </style>
 
-    <!-- Mobile Performance Optimizations & Grid Fixes -->
+
     <style>
         @media (max-width: 768px) {
-            body::before, body::after { display: none !important; animation: none !important; }
-            .pcard:hover, .stat-card:hover, .card:hover, .pcard-icon, .stat-card-icon { transform: none !important; box-shadow: none !important; }
-            .btn-primary, .hero-visual::before, .hero-visual::after, .pulse-indicator { animation: none !important; }
-            html { scroll-behavior: auto !important; }
-        }
-        @media (max-width: 480px) {
-            /* Force all multi-column grids to 1 column on very small phones to prevent overflow */
-            .stats-grid, .cards-grid, .actions-grid, .two-col-grid, .form-row, .stats-row, .skeleton-stat-row { 
-                grid-template-columns: 1fr !important; 
+
+            body::before,
+            body::after {
+                display: none !important;
+                animation: none !important;
             }
-            .data-table-wrap, .txn-table-wrap, .table-wrap {
+
+            .pcard:hover,
+            .stat-card:hover,
+            .card:hover,
+            .pcard-icon,
+            .stat-card-icon {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            .btn-primary,
+            .hero-visual::before,
+            .hero-visual::after,
+            .pulse-indicator {
+                animation: none !important;
+            }
+
+            html {
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+
+            .stats-grid,
+            .cards-grid,
+            .actions-grid,
+            .two-col-grid,
+            .form-row,
+            .stats-row,
+            .skeleton-stat-row {
+                grid-template-columns: 1fr !important;
+            }
+
+            .data-table-wrap,
+            .txn-table-wrap,
+            .table-wrap {
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch !important;
             }
@@ -584,484 +2079,1101 @@
 
 <body>
 
-    <div class="bg-glow"></div>
-    <div class="bg-grid"></div>
 
-    <div class="wrapper">
+    <canvas id="particleCanvas"></canvas>
 
-        <!-- LOGO -->
-        <a href="home.html" class="logo">
-            <div class="logo-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
-                    stroke-linecap="round" stroke-linejoin="round">
+
+    <nav id="navbar">
+        <a href="home.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
                     <path d="M3 3v18h18" />
                     <path d="m7 16 4-4 4 4 4-4" />
                 </svg>
             </div>
-            <span class="logo-text">MUSKFUND</span>
+            <span class="nav-logo-text">MUSKFUND</span>
         </a>
+        <div class="nav-links" id="navLinks">
+            <a href="#about">About</a>
+            <a href="#how">How It Works</a>
+            <a href="#performance">Performance</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <a href="index.html" class="nav-cta">Investor Login</a>
+        <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" onclick="toggleMenu()">About</a>
+        <a href="#how" onclick="toggleMenu()">How It Works</a>
+        <a href="#performance" onclick="toggleMenu()">Performance</a>
+        <a href="#contact" onclick="toggleMenu()">Contact</a>
+        <a href="index.html">Investor Login</a>
+    </div>
 
-        <div class="card">
 
-            <!-- SUSPENDED BANNER -->
-            <div class="suspended-banner" id="suspendedBanner">
-                <div class="suspended-banner-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF4D4D" stroke-width="1.5"
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <div class="hero-badge-dot"></div>
+                <span>Private Portfolio Management</span>
+            </div>
+            <h1 class="hero-title">
+                GROW<br><span class="accent" style="text-shadow:0 0 40px rgba(0, 229, 255,0.4)">WEALTH.</span><span
+                    class="tw-cursor" id="twCursor"></span><br>CREATE FUTURES.
+            </h1>
+            <p class="hero-sub">Stop watching markets and worrying. MUSKFUND puts your capital to work with
+                disciplined strategy, real-time transparency, and a team that treats your money like our own.</p>
+            <div class="hero-actions">
+                <a href="#contact" class="btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    Get Started
+                </a>
+                <a href="#how" class="btn-outline">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="12" />
-                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                        <path d="M12 8v4l3 3" />
                     </svg>
+                    How It Works
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div>
+                    <div class="hero-stat-num"><span class="counter" data-target="1">0</span>Cr+</div>
+                    <div class="hero-stat-label">Assets Under Management</div>
                 </div>
                 <div>
-                    <div class="suspended-banner-title">Account Suspended</div>
-                    <div class="suspended-banner-text">Your investor account has been suspended. Please contact your
-                        portfolio manager on WhatsApp for assistance.</div>
+                    <div class="hero-stat-num"><span class="counter" data-target="40">0</span>+</div>
+                    <div class="hero-stat-label">Active Investors</div>
+                </div>
+                <div>
+                    <div class="hero-stat-num"><span class="counter" data-target="15">0</span>%</div>
+                    <div class="hero-stat-label">Avg Annual Return</div>
                 </div>
             </div>
-
-            <!-- CARD HEADER -->
-            <div class="card-header" id="loginHeader">
-                <div class="card-icon">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
+        </div>
+        <div class="hero-visual">
+            <div class="mock-card">
+                <div class="mock-label">Current Portfolio Value</div>
+                <div class="mock-value">₹4,82,350</div>
+                <div class="mock-sub">+15% this year</div>
+                <div class="mock-bar">
+                    <div class="mock-bar-fill"></div>
                 </div>
-                <div class="card-title">INVESTOR LOGIN</div>
-                <div class="card-sub">Access your private portfolio dashboard</div>
             </div>
+            <div class="mock-card">
+                <div class="mock-label">Monthly Return</div>
+                <div class="mock-value">+2.1%</div>
+                <div class="mock-sub">Consistent since Jan 2023</div>
+            </div>
+        </div>
+    </section>
 
-            <!-- LOGIN FORM -->
-            <form class="form" id="loginForm" onsubmit="handleLogin(event)" novalidate>
 
-                <!-- name -->
-                <div class="form-group">
-                    <label class="form-label">Full Name</label>
-                    <div class="input-wrap">
-                        <input type="text" id="nameInput" class="form-input" placeholder="e.g. Rajesh Kumar"
-                            required />
+    <section class="about" id="about">
+        <div class="about-grid">
+            <div>
+                <div class="section-tag">About Us</div>
+                <h2 class="section-title reveal">WHO WE ARE</h2>
+                <p class="section-sub reveal reveal-delay-1">MUSKFUND is a private portfolio management firm built
+                    on one belief — your capital deserves more than a mutual fund. We manage concentrated,
+                    high-conviction portfolios for serious investors who want real returns.</p>
+                <div class="about-points">
+                    <div class="about-point reveal reveal-delay-2">
+                        <div class="about-point-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="about-point-title">SEBI-Aware, Risk-First</div>
+                            <div class="about-point-desc">Every position is stress-tested. We never enter a trade
+                                without a defined exit and risk limit.</div>
+                        </div>
                     </div>
-                    <div class="field-error" id="emailError">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" y1="8" x2="12" y2="12" />
-                            <line x1="12" y1="16" x2="12.01" y2="16" />
-                        </svg>
-                        <span id="emailErrorText">Please enter your full name</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Password (Aadhaar Last 6 / Custom)</label>
-                    <div class="input-wrap">
-                        <input type="password" id="passwordInput" class="form-input"
-
- placeholder="e.g. 123456 or MFH-001"
-                            autocomplete="current-password" style="padding-right:48px" required />
-                        <button type="button" class="pw-toggle" id="pwToggle" onclick="togglePassword()"
-                            aria-label="Show password">
-                            <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <div class="about-point reveal reveal-delay-3">
+                        <div class="about-point-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
                                 <circle cx="12" cy="12" r="3" />
                             </svg>
-                        </button>
-                    </div>
-                    <div class="field-error" id="passwordError">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" y1="8" x2="12" y2="12" />
-                            <line x1="12" y1="16" x2="12.01" y2="16" />
-                        </svg>
-                        <span id="passwordErrorText">Please enter your password</span>
-                    </div>
-                </div>
-
-                <!-- No forgot password link needed for this custom login -->
-
-                <!-- global error -->
-                <div class="global-error" id="globalError">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4D4D" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="12" />
-                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                    </svg>
-                    <span id="globalErrorText">Invalid Name or Aadhaar/ID. Please try again.</span>
-                </div>
-
-                <!-- submit -->
-                <button type="submit" class="btn-submit" id="loginBtn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                        <polyline points="10 17 15 12 10 7" />
-                        <line x1="15" y1="12" x2="3" y2="12" />
-                    </svg>
-                    Sign In
-                </button>
-
-            </form>
-
-            <!-- FORGOT PASSWORD PANEL -->
-            <div class="forgot-panel" id="forgotPanel">
-
-                <button type="button" class="back-btn" onclick="showLogin()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12" />
-                        <polyline points="12 19 5 12 12 5" />
-                    </svg>
-                    Back to Login
-                </button>
-
-                <div class="card-header" style="margin-bottom:0;padding-bottom:0">
-                    <div class="card-icon" style="width:52px;height:52px">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                            <polyline points="22,6 12,13 2,6" />
-                        </svg>
-                    </div>
-                    <div class="card-title" style="font-size:26px">RESET PASSWORD</div>
-                    <div class="card-sub">Enter your email and we will send a reset link.</div>
-                </div>
-
-                <!-- success state -->
-                <div class="success-state" id="resetSuccess">
-                    <div class="success-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                    </div>
-                    <div class="success-title">EMAIL SENT</div>
-                    <div class="success-sub">Check your inbox for the password reset link. It may take a minute to
-                        arrive.</div>
-                    <button type="button" class="btn-submit" onclick="showLogin()" style="max-width:200px">Back to
-                        Login</button>
-                </div>
-
-                <div id="resetFormWrap">
-                    <div class="form-group" style="margin-bottom:16px">
-                        <label class="form-label">Email Address</label>
-                        <div class="input-wrap">
-                            <input type="email" id="resetEmail" class="form-input" placeholder="your-email@example.com"
-                                autocomplete="email" autocapitalize="none" />
                         </div>
-                        <div class="field-error" id="resetEmailError">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="8" x2="12" y2="12" />
-                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                        <div>
+                            <div class="about-point-title">Full Transparency</div>
+                            <div class="about-point-desc">Your personal dashboard shows every rupee, every transaction,
+                                every update — in real time.</div>
+                        </div>
+                    </div>
+                    <div class="about-point reveal reveal-delay-4">
+                        <div class="about-point-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3v18h18" />
+                                <path d="m7 16 4-4 4 4 4-4" />
                             </svg>
-                            <span>Please enter a valid email</span>
+                        </div>
+                        <div>
+                            <div class="about-point-title">Consistent Compounding</div>
+                            <div class="about-point-desc">We focus on sustainable, compounding returns — not short-term
+                                spikes that vanish overnight.</div>
                         </div>
                     </div>
-
-                    <div class="global-error" id="resetError">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4D4D" stroke-width="1.5"
-                            stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" y1="8" x2="12" y2="12" />
-                            <line x1="12" y1="16" x2="12.01" y2="16" />
-                        </svg>
-                        <span id="resetErrorText">Something went wrong. Please try again.</span>
+                </div>
+            </div>
+            <div class="about-visual reveal">
+                <div class="about-card-badge">Live Portfolio</div>
+                <div class="about-card-main">
+                    <div
+                        style="font-size:12px;color:var(--grey);text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;font-weight:600">
+                        Sample Performance Snapshot</div>
+                    <div class="about-card-stat">
+                        <span class="about-card-stat-label">Invested Amount</span>
+                        <span class="about-card-stat-value">₹5,00,000</span>
                     </div>
+                    <div class="about-card-stat">
+                        <span class="about-card-stat-label">Current Value</span>
+                        <span class="about-card-stat-value">₹6,62,400</span>
+                    </div>
+                    <div class="about-card-stat">
+                        <span class="about-card-stat-label">Profit / Loss</span>
+                        <span class="about-card-stat-value" style="color:#00e5ff">+₹1,62,400</span>
+                    </div>
+                    <div class="about-card-stat">
+                        <span class="about-card-stat-label">Growth</span>
+                        <span class="about-card-stat-value" style="color:#00e5ff">+15%</span>
+                    </div>
+                    <div class="about-card-stat">
+                        <span class="about-card-stat-label">Duration</span>
+                        <span class="about-card-stat-value" style="color:var(--grey)">18 Months</span>
+                    </div>
+                    <div class="about-card-stat">
+                        <span class="about-card-stat-label">Monthly Return</span>
+                        <span class="about-card-stat-value">2.1%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                    <button type="button" class="btn-submit" id="resetBtn" onclick="handleReset()"
-                        style="margin-top:16px">
+
+    <section id="founder">
+        <div class="section-tag">Leadership</div>
+        <h2 class="section-title reveal">THE FOUNDER</h2>
+        <div class="founder-wrap" style="margin-top:48px">
+            <div class="founder-photo reveal">
+                <img src="IMG_0017.PNG" alt="Mukesh Sah - Founder"
+                    style="width:100%; height:100%; object-fit:cover; display:block; filter: grayscale(100%) contrast(1.2); transition: filter 0.4s ease;">
+            </div>
+            <div class="reveal reveal-delay-1">
+                <div class="founder-tag">Founder & Portfolio Manager</div>
+                <div class="founder-name">MUKESH SAH</div>
+                <div class="founder-role">// Chief Investment Officer, MUSKFUND</div>
+                <div class="founder-bio">
+                    <p>Mukesh Sah is an investor, entrepreneur, and wealth growth strategist based in Giridih,
+                        Jharkhand.</p>
+                    <p>With over 3 years of experience in trading, investing, and business growth, he has worked across
+                        multiple sectors including stock market investing, crypto markets, startups, digital businesses,
+                        and modern online ventures.</p>
+                    <p>Over the years, he has managed investment portfolios valued up to ₹1 crore while also building
+                        and operating multiple businesses, including a marketing agency and e-commerce ventures.</p>
+                    <p>His combined business experience across investing, digital growth, and entrepreneurship has
+                        contributed to generating multi-crore revenue through various business models and growth
+                        systems.</p>
+                    <p>At MUSKFUND, his vision is to create a modern, transparent, and growth-focused investment
+                        platform where investors can track and monitor their portfolio performance with confidence.</p>
+                </div>
+                <div class="founder-quote">
+                    “Real wealth is built through consistency and strategic investing.”
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="hiw" id="how">
+        <div class="section-tag">Process</div>
+        <h2 class="section-title reveal">HOW IT WORKS</h2>
+        <p class="section-sub reveal reveal-delay-1">Four simple steps from onboarding to watching your wealth grow.</p>
+        <div class="hiw-steps">
+            <div class="hiw-step reveal">
+                <div class="hiw-step-num">01</div>
+                <div class="hiw-step-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </div>
+                <div class="hiw-step-title">Onboarding</div>
+                <div class="hiw-step-desc">You reach out, we verify your profile, and our team creates your private
+                    investor account with a unique MFH investor ID.</div>
+            </div>
+            <div class="hiw-step reveal reveal-delay-1">
+                <div class="hiw-step-num">02</div>
+                <div class="hiw-step-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                </div>
+                <div class="hiw-step-title">Deposit Funds</div>
+                <div class="hiw-step-desc">You transfer your investment amount directly. Every deposit is logged
+                    instantly and reflected on your dashboard.</div>
+            </div>
+            <div class="hiw-step reveal reveal-delay-2">
+                <div class="hiw-step-num">03</div>
+                <div class="hiw-step-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M3 3v18h18" />
+                        <path d="m7 16 4-4 4 4 4-4" />
+                    </svg>
+                </div>
+                <div class="hiw-step-title">We Manage</div>
+                <div class="hiw-step-desc">Our team actively manages your portfolio with high-conviction positions,
+                    strict stop-losses, and regular rebalancing.</div>
+            </div>
+            <div class="hiw-step reveal reveal-delay-3">
+                <div class="hiw-step-num">04</div>
+                <div class="hiw-step-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                </div>
+                <div class="hiw-step-title">You Monitor</div>
+                <div class="hiw-step-desc">Login anytime from your phone or desktop to check your live portfolio value,
+                    transactions, and growth charts.</div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="why">
+        <div class="section-tag">Why Us</div>
+        <h2 class="section-title reveal">BUILT DIFFERENT.</h2>
+        <p class="section-sub reveal reveal-delay-1">We are not a broker, not a mutual fund, not an app. We are a
+            private team that manages capital with conviction.</p>
+        <div class="why-grid">
+            <div class="why-card reveal">
+                <div class="why-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                </div>
+                <div class="why-title">Capital Protection First</div>
+                <div class="why-desc">Every strategy has a defined maximum drawdown. We do not chase returns by gambling
+                    with your principal.</div>
+            </div>
+            <div class="why-card reveal reveal-delay-1">
+                <div class="why-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                </div>
+                <div class="why-title">Real-Time Dashboard</div>
+                <div class="why-desc">Your private dashboard shows invested amount, current value, P&L, growth %, and
+                    full transaction history — always live.</div>
+            </div>
+            <div class="why-card reveal reveal-delay-2">
+                <div class="why-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+                <div class="why-title">Private & Exclusive</div>
+                <div class="why-desc">We limit our investor base to maintain portfolio quality. Not everyone gets in —
+                    your capital gets focused attention.</div>
+            </div>
+            <div class="why-card reveal reveal-delay-3">
+                <div class="why-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M3 3v18h18" />
+                        <path d="m7 16 4-4 4 4 4-4" />
+                    </svg>
+                </div>
+                <div class="why-title">Compounding Returns</div>
+                <div class="why-desc">We reinvest gains systematically. The portfolio compounds monthly — your money
+                    works harder the longer it stays.</div>
+            </div>
+            <div class="why-card reveal reveal-delay-1">
+                <div class="why-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                </div>
+                <div class="why-title">Direct Communication</div>
+                <div class="why-desc">WhatsApp-first support from the portfolio manager directly. No call centers, no
+                    bots, no waiting in queues.</div>
+            </div>
+            <div class="why-card reveal reveal-delay-2">
+                <div class="why-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                </div>
+                <div class="why-title">Secure & Confidential</div>
+                <div class="why-desc">Your data is encrypted, your account is protected by Supabase auth, and investor
+                    details are never shared.</div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="perf" id="performance">
+        <div class="section-tag">Track Record</div>
+        <h2 class="section-title reveal">NUMBERS THAT<br><span class="shimmer-text">SPEAK.</span></h2>
+        <div class="perf-grid">
+            <div class="perf-card reveal">
+                <div class="perf-num">₹<span class="counter" data-target="1">0</span>Cr+</div>
+                <div class="perf-label">Assets Under Management</div>
+                <div class="perf-sub">Across all active portfolios</div>
+            </div>
+            <div class="perf-card reveal reveal-delay-1">
+                <div class="perf-num"><span class="counter" data-target="15">0</span>%</div>
+                <div class="perf-label">Average Annual Return</div>
+                <div class="perf-sub">Since 2023, post-fees</div>
+            </div>
+            <div class="perf-card reveal reveal-delay-2">
+                <div class="perf-num"><span class="counter" data-target="40">0</span>+</div>
+                <div class="perf-label">Active Investors</div>
+                <div class="perf-sub">Trust us with their capital</div>
+            </div>
+            <div class="perf-card reveal reveal-delay-3">
+                <div class="perf-num"><span class="counter" data-target="80">0</span>%</div>
+                <div class="perf-label">Profitable Months</div>
+                <div class="perf-sub">Out of all months managed</div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="testimonials">
+        <div class="section-tag">Investors Say</div>
+        <h2 class="section-title reveal">WHAT OUR<br>INVESTORS SAY.</h2>
+        <div class="testi-grid">
+            <div class="testi-card reveal">
+                <div class="testi-stars">
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                </div>
+                <div class="testi-text">"I had money sitting idle in FDs for years. After joining MUSKFUND, my
+                    portfolio grew 28% in the first year alone. The dashboard makes everything crystal clear — I check
+                    it daily."</div>
+                <div class="testi-author">
+                    <div class="testi-avatar">RK</div>
+                    <div>
+                        <div class="testi-name">Rajesh Kumar</div>
+                        <div class="testi-id">MFH-007 — Patna</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card reveal reveal-delay-1">
+                <div class="testi-stars">
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                </div>
+                <div class="testi-text">"What sets Mukesh apart is transparency. Every transaction is visible, every
+                    update is explained. I've never felt more in control of my investments while doing absolutely
+                    nothing myself."</div>
+                <div class="testi-author">
+                    <div class="testi-avatar">PM</div>
+                    <div>
+                        <div class="testi-name">Priya Mehta</div>
+                        <div class="testi-id">MFH-014 — Mumbai</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card reveal reveal-delay-2">
+                <div class="testi-stars">
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <svg class="testi-star" viewBox="0 0 24 24" fill="#F0B429">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                </div>
+                <div class="testi-text">"I was skeptical at first — gave a small amount to test. Within 6 months I
+                    doubled my allocation. The consistency is unreal. No drama, no excuses, just returns in my
+                    portfolio."</div>
+                <div class="testi-author">
+                    <div class="testi-avatar">AS</div>
+                    <div>
+                        <div class="testi-name">Arjun Singh</div>
+                        <div class="testi-id">MFH-023 — Delhi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)"
+        id="faq">
+        <div class="section-tag">FAQ</div>
+        <h2 class="section-title reveal">COMMON<br>QUESTIONS.</h2>
+        <div class="faq-list reveal">
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    How do I deposit money into my portfolio?
+                    <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></div>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">After your account is created, you will receive our company bank details
+                        via WhatsApp. Transfer directly via NEFT/IMPS/UPI and share the UTR. Our team will log it and it
+                        will reflect on your dashboard within a few hours.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    Is my money safe? What if I want to withdraw?
+                    <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></div>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Withdrawals are processed within 2-3 working days upon request. Simply
+                        message us on WhatsApp with the amount and your bank details. Your current portfolio value is
+                        always visible on your dashboard so you know exactly what to expect.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    What is the minimum investment amount?
+                    <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></div>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Our minimum investment is ₹50,000. This ensures we can manage your
+                        portfolio meaningfully and generate returns that make a real difference to your financial goals.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    How often is my portfolio value updated?
+                    <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></div>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Portfolio values are updated at the end of each trading day or whenever a
+                        significant position change occurs. You will see an update in the transactions section and the
+                        current value card on your dashboard will reflect it instantly.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    What is the investment model and are there any lock-in periods?
+                    <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></div>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">We operate on a Fixed Yearly Return Model. To ensure disciplined growth and
+                        optimal returns, we offer three lock-in plans: 6 Month Lock-In, 1 Year Lock-In, and 2 Year
+                        Lock-In. Details will be discussed during your onboarding.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    Can I track my portfolio on mobile?
+                    <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></div>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Yes. Your investor dashboard is fully mobile-optimized. Open it in any
+                        browser on your phone — no app download needed. Log in with your email and password to see your
+                        full portfolio, transactions, charts, and profile anytime.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="contact" id="contact">
+        <div class="section-tag">Get In Touch</div>
+        <h2 class="section-title reveal">START YOUR<br>JOURNEY.</h2>
+        <div class="contact-grid" style="margin-top:48px">
+            <div class="reveal">
+                <p style="font-size:15px;color:var(--grey);line-height:1.7;margin-bottom:32px">Interested in investing
+                    with us? Fill the form and our team will reach out within 24 hours with the next steps.</p>
+                <form class="contact-form" onsubmit="submitContact(event)">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="contactName" class="form-input" placeholder="Your full name" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" id="contactPhone" class="form-input" placeholder="+91 XXXXX XXXXX" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="contactEmail" class="form-input" placeholder="you@example.com" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Investment Range</label>
+                        <select id="contactRange" class="form-input" style="cursor:pointer">
+                            <option value="" style="background:#151820">Select range</option>
+                            <option style="background:#151820">₹50,000 – ₹1,00,000</option>
+                            <option style="background:#151820">₹1,00,000 – ₹5,00,000</option>
+                            <option style="background:#151820">₹5,00,000 – ₹20,00,000</option>
+                            <option style="background:#151820">Above ₹20,00,000</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message (Optional)</label>
+                        <textarea id="contactMsg" class="form-input"
+                            placeholder="Any questions or details..."></textarea>
+                    </div>
+                    <button type="submit" class="form-submit">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="22" y1="2" x2="11" y2="13" />
                             <polygon points="22 2 15 22 11 13 2 9 22 2" />
                         </svg>
-                        Send Reset Link
+                        Send Enquiry
                     </button>
+                </form>
+            </div>
+            <div class="contact-info reveal reveal-delay-1">
+                <div class="contact-item">
+                    <div class="contact-item-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="contact-item-label">WhatsApp / Phone</div>
+                        <div class="contact-item-value">+91 9771534777</div>
+                    </div>
                 </div>
+                <div class="contact-item">
+                    <div class="contact-item-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="contact-item-label">Email</div>
+                        <div class="contact-item-value">To Be Provided Later</div>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-item-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="contact-item-label">Location</div>
+                        <div class="contact-item-value">Giridih, Jharkhand, India</div>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-item-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="contact-item-label">Response Time</div>
+                        <div class="contact-item-value">Within 24 hours</div>
+                    </div>
+                </div>
+                <div
+                    style="margin-top:12px;padding:20px;background:var(--bg);border:1px solid var(--border);border-radius:12px">
+                    <div style="font-size:12px;color:var(--grey);line-height:1.7">
+                        <strong style="color:var(--white);display:block;margin-bottom:6px">Disclaimer</strong>
+                        Investments are subject to market risks. Past performance does not guarantee future returns.
+                        Please read all related documents carefully before investing.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+
+    <section class="wa-section">
+        <div class="wa-grid"></div>
+        <div class="wa-eyebrow reveal">Start Your Journey</div>
+        <h2 class="wa-headline reveal">
+            STOP MANAGING
+            <span class="line-accent">YOUR WEALTH ALONE.</span>
+        </h2>
+        <p class="wa-sub reveal">1,000+ investors trust us with their capital. Mukesh personally responds on WhatsApp —
+            no middlemen, no support tickets, just results.</p>
+        <div class="wa-actions reveal">
+            <a href="https://wa.me/919771534777?text=Hi%2C%20I%20am%20interested%20in%20investing%20with%20MUSKFUND"
+                target="_blank" class="btn-wa">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                </svg>
+                Contact With MUSKFUND
+            </a>
+            <a href="#contact" class="btn-wa-outline">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+                Send Enquiry
+            </a>
+        </div>
+        <div class="wa-badges reveal">
+            <div class="wa-badge"><span class="wa-badge-dot green"></span> Profit-sharing only</div>
+            <div class="wa-badge"><span class="wa-badge-dot green"></span> No upfront fees</div>
+            <div class="wa-badge"><span class="wa-badge-dot gold"></span> Withdrawals in 48 hrs</div>
+        </div>
+    </section>
+
+
+    <footer>
+        <div class="footer-main">
+
+            <div>
+                <div class="footer-col-title">Navigation</div>
+                <div class="footer-links">
+                    <a href="#hero">Home</a>
+                    <a href="#about">About Us</a>
+                    <a href="#how">How It Works</a>
+                    <a href="#performance">Performance</a>
+                    <a href="#founder">Our Founder</a>
+                    <a href="#contact">Contact</a>
+                </div>
             </div>
 
+            <div>
+                <div class="footer-col-title">Legal</div>
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="disclaimer.html">Disclaimer</a>
+                </div>
+            </div>
+
+            <div>
+                <div class="footer-col-title">Investors</div>
+                <div class="footer-links">
+                    <a href="index.html">Investor Login</a>
+                    <a href="#contact">Get Started</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="#why">Why Us</a>
+                </div>
+            </div>
+
+            <div>
+                <div class="footer-col-title">Connect</div>
+                <div class="footer-links">
+                    <a href="https://wa.me/919771534777" target="_blank" rel="noopener">WhatsApp</a>
+                    <a href="#contact">Email Us</a>
+                    <a href="#contact">Book a Call</a>
+                </div>
+            </div>
+
+            <div>
+                <div class="footer-subscribe-label">Stay updated</div>
+                <div class="footer-subscribe-desc">We don't post very often so don't worry, we won't be annoying.</div>
+                <div class="footer-subscribe-form">
+                    <div class="footer-email-wrap">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                        <input class="footer-email-input" type="email" placeholder="your@email.com" id="footerEmail">
+                    </div>
+                    <button class="footer-submit-btn" onclick="footerSubscribe()">SUBMIT</button>
+                </div>
+            </div>
         </div>
 
-        <div class="footer-note">
-            By logging in you agree to our
-            <a href="terms.html">Terms of Service</a> and
-            <a href="privacy.html">Privacy Policy</a>.<br />
-            <span style="margin-top:6px;display:inline-block">
-                Need help?
-                <a href="https://wa.me/919771534777" target="_blank">Contact us on WhatsApp</a>
-            </span>
-        </div>
 
-    </div>
+        <div class="footer-watermark">MUSKFUND</div>
+
+        <div class="footer-bottom">
+            <div class="footer-copy">© 2025 MUSKFUND. All rights reserved.</div>
+            <div class="footer-disclaimer">Investments are subject to market risks. This platform is for existing
+                investors only and does not constitute a public offering.</div>
+        </div>
+    </footer>
 
     <script>
-// ---- CHECK FOR SUSPENDED PARAM ----
-(function(){
-  const params = new URLSearchParams(window.location.search);
-  if(params.get('suspended')==='1'){
-    document.getElementById('suspendedBanner').classList.add('show');
-  }
-})();
 
-// ---- CHECK EXISTING SESSION ----
-(async function(){
-  try{
-    const session = await getSession();
-    if(session){
-      const { data: profile } = await getProfile(session.user.id);
-      if(profile && profile.is_active){
-        if(profile.role === 'admin'){
-          window.location.href = 'admin-dashboard.html';
-        } else {
-          window.location.href = 'dashboard.html';
+        function toggleMenu() {
+            const m = document.getElementById('mobileMenu');
+            const h = document.getElementById('hamburger');
+            m.classList.toggle('open');
+            const spans = h.querySelectorAll('span');
+            if (m.classList.contains('open')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+            } else {
+                spans[0].style.transform = ''; spans[1].style.opacity = ''; spans[2].style.transform = '';
+            }
         }
-      }
-    }
-  } catch(e){ /* no session */ }
-})();
 
-// ---- PASSWORD TOGGLE ----
-let pwVisible = false;
-function togglePassword(){
-  const input = document.getElementById('passwordInput');
-  const icon = document.getElementById('eyeIcon');
-  pwVisible = !pwVisible;
-  input.type = pwVisible ? 'text' : 'password';
-  icon.innerHTML = pwVisible
-    ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`
-    : `<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>`;
-}
 
-// ---- SHOW/HIDE PANELS ----
-function showForgot(){
-  document.getElementById('loginForm').classList.add('hidden');
-  document.getElementById('loginHeader').style.display = 'none';
-  document.getElementById('forgotPanel').classList.add('active');
-  clearErrors();
-}
-function showLogin(){
-  document.getElementById('loginForm').classList.remove('hidden');
-  document.getElementById('loginHeader').style.display = 'block';
-  document.getElementById('forgotPanel').classList.remove('active');
-  document.getElementById('resetSuccess').classList.remove('show');
-  document.getElementById('resetFormWrap').style.display = '';
-  clearErrors();
-}
+        document.addEventListener('click', function (e) {
+            const menu = document.getElementById('mobileMenu');
+            const hamburger = document.getElementById('hamburger');
+            if (menu.classList.contains('open') && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+                toggleMenu();
+            }
+        });
 
-// ---- CLEAR ERRORS ----
-function clearErrors(){
-  document.getElementById('emailError').classList.remove('show');
-  document.getElementById('passwordError').classList.remove('show');
-  document.getElementById('globalError').classList.remove('show');
-  document.getElementById('nameInput').classList.remove('error');
-  document.getElementById('passwordInput').classList.remove('error');
-}
 
-// ---- VALIDATE EMAIL ----
-function isValidEmail(e){
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-}
+        function checkNav() {
+            const h = document.getElementById('hamburger');
+            const nl = document.getElementById('navLinks');
+            const cta = document.querySelector('.nav-cta');
+            if (window.innerWidth <= 768) {
+                h.style.display = 'flex';
+                nl.style.display = 'none';
+                cta.style.display = 'none';
+            } else {
+                h.style.display = 'none';
+                nl.style.display = 'flex';
+                cta.style.display = 'flex';
+                document.getElementById('mobileMenu').classList.remove('open');
+            }
+        }
+        checkNav();
+        window.addEventListener('resize', checkNav);
 
-// ---- LOADING STATE ----
-function setLoginLoading(loading){
-  const btn = document.getElementById('loginBtn');
-  if(loading){
-    btn.disabled = true;
-    btn.innerHTML = `
-      <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-      </svg>
-      Signing in...`;
-  } else {
-    btn.disabled = false;
-    btn.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
-      </svg>
-      Sign In`;
-  }
-}
 
-function setResetLoading(loading){
-  const btn = document.getElementById('resetBtn');
-  if(loading){
-    btn.disabled = true;
-    btn.innerHTML = `
-      <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-      </svg>
-      Sending...`;
-  } else {
-    btn.disabled = false;
-    btn.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-      </svg>
-      Send Reset Link`;
-  }
-}
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible') } });
+        }, { threshold: 0.1 });
+        reveals.forEach(r => observer.observe(r));
 
-// ---- HANDLE LOGIN ----
-async function handleLogin(e){
-  e.preventDefault();
-  clearErrors();
 
-  const name = document.getElementById('nameInput').value.trim();
-  const secret = document.getElementById('passwordInput').value.trim();
+        function animateCounter(el) {
+            const target = parseInt(el.dataset.target);
+            const duration = 1800;
+            const start = performance.now();
+            function step(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.floor(eased * target);
+                if (progress < 1) requestAnimationFrame(step);
+                else el.textContent = target;
+            }
+            requestAnimationFrame(step);
+        }
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.querySelectorAll('.counter').forEach(animateCounter);
+                    counterObserver.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('.hero-stats,.perf-grid').forEach(s => counterObserver.observe(s));
 
-  // validate
-  let hasError = false;
-  if(!name){
-    document.getElementById('nameInput').classList.add('error');
-    document.getElementById('emailError').classList.add('show');
-    hasError = true;
-  }
-  if(!secret){
-    document.getElementById('passwordInput').classList.add('error');
-    document.getElementById('passwordError').classList.add('show');
-    document.getElementById('passwordErrorText').textContent = 'Please enter your Aadhaar / Investor ID';
-    hasError = true;
-  }
-  if(hasError) return;
 
-  setLoginLoading(true);
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+            if (!wasOpen) item.classList.add('open');
+        }
 
-  try{
-    // 1. Get email using Name & Secret (RPC)
-    const { data: email, error: rpcError } = await db.rpc('get_investor_email', {
-      p_name: name,
-      p_secret: secret
-    });
 
-    if (rpcError || !email) {
-      setLoginLoading(false);
-      document.getElementById('nameInput').classList.add('error');
-      document.getElementById('passwordInput').classList.add('error');
-      document.getElementById('globalError').classList.add('show');
-      document.getElementById('globalErrorText').textContent = 'Invalid Name or Aadhaar/ID. Please check and try again.';
-      return;
-    }
+        function submitContact(e) {
+            e.preventDefault();
 
-    // 2. sign in with email & secret (which is the password)
-    const { data, error } = await db.auth.signInWithPassword({ email: email, password: secret });
+            const name = document.getElementById('contactName').value || '';
+            const phone = document.getElementById('contactPhone').value || '';
+            const email = document.getElementById('contactEmail').value || 'Not provided';
+            const range = document.getElementById('contactRange').value || 'Not provided';
+            const msg = document.getElementById('contactMsg').value || 'No message';
 
-    if(error){
-      setLoginLoading(false);
-      document.getElementById('nameInput').classList.add('error');
-      document.getElementById('passwordInput').classList.add('error');
-      document.getElementById('globalError').classList.add('show');
+            const text = `*New Investment Enquiry*\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Email:* ${email}\n*Investment Range:* ${range}\n*Message:* ${msg}`;
+            const waLink = `https://wa.me/919771534777?text=${encodeURIComponent(text)}`;
 
-      if(error.message.toLowerCase().includes('invalid')){
-        document.getElementById('globalErrorText').textContent = 'Invalid credentials. Please check and try again.';
-      } else if(error.message.toLowerCase().includes('email not confirmed')){
-        document.getElementById('globalErrorText').textContent = 'Please confirm your email address first.';
-      } else {
-        document.getElementById('globalErrorText').textContent = error.message || 'Login failed. Please try again.';
-      }
-      return;
-    }
+            window.open(waLink, '_blank');
 
-    // fetch profile
-    const { data: profile, error: profileError } = await db
-      .from('profiles')
-      .select('*')
-      .eq('id', data.user.id)
-      .single();
+            const btn = e.target.querySelector('.form-submit');
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Redirecting to WhatsApp...';
+            btn.style.background = 'var(--green-mid)';
 
-    if(profileError || !profile){
-      await db.auth.signOut();
-      setLoginLoading(false);
-      document.getElementById('globalError').classList.add('show');
-      document.getElementById('globalErrorText').textContent = 'Account not found. Please contact your portfolio manager.';
-      return;
-    }
+            setTimeout(() => {
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Enquiry';
+                btn.style.background = 'var(--green)';
+                e.target.reset();
+            }, 3000);
+        }
 
-    // check suspended
-    if(!profile.is_active){
-      await db.auth.signOut();
-      setLoginLoading(false);
-      document.getElementById('suspendedBanner').classList.add('show');
-      document.getElementById('globalError').classList.remove('show');
-      window.scrollTo({top:0,behavior:'smooth'});
-      return;
-    }
 
-    // redirect by role
-    if(profile.role === 'admin'){
-      window.location.href = 'admin-dashboard.html';
-    } else {
-      window.location.href = 'dashboard.html';
-    }
 
-  } catch(err){
-    setLoginLoading(false);
-    document.getElementById('globalError').classList.add('show');
-    document.getElementById('globalErrorText').textContent = 'Network error. Please check your connection.';
-  }
-}
 
-// ---- HANDLE RESET ----
-async function handleReset(){
-  const email = document.getElementById('resetEmail').value.trim();
-  document.getElementById('resetEmailError').classList.remove('show');
-  document.getElementById('resetError').classList.remove('show');
-  document.getElementById('resetEmail').classList.remove('error');
+        (function () {
+            if (window.innerWidth <= 900) return;
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+            const COLORS = ['rgba(0, 229, 255,', 'rgba(240,180,41,', 'rgba(0, 229, 255,'];
+            let W, H, dots;
 
-  if(!email || !isValidEmail(email)){
-    document.getElementById('resetEmail').classList.add('error');
-    document.getElementById('resetEmailError').classList.add('show');
-    return;
-  }
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', () => { if (window.innerWidth > 900) resize(); });
 
-  setResetLoading(true);
+            function randBetween(a, b) { return a + Math.random() * (b - a); }
 
-  try{
-    const { error } = await db.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/set-password.html'
-    });
+            function createDot() {
+                const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+                return {
+                    x: randBetween(0, W),
+                    y: randBetween(0, H),
+                    r: randBetween(0.6, 2.2),
+                    baseAlpha: randBetween(0.15, 0.55),
+                    alpha: 0,
+                    phase: randBetween(0, Math.PI * 2),
+                    speed: randBetween(0.4, 1.2),
+                    color
+                };
+            }
 
-    setResetLoading(false);
+            const COUNT = Math.min(120, Math.floor((W * H) / 14000));
+            dots = Array.from({ length: COUNT }, createDot);
 
-    if(error){
-      document.getElementById('resetError').classList.add('show');
-      document.getElementById('resetErrorText').textContent = error.message || 'Failed to send reset email. Please try again.';
-      return;
-    }
+            let last = 0;
+            function draw(ts) {
+                const dt = (ts - last) / 1000;
+                last = ts;
+                ctx.clearRect(0, 0, W, H);
+                dots.forEach(d => {
+                    d.phase += d.speed * dt;
+                    d.alpha = d.baseAlpha * (0.5 + 0.5 * Math.sin(d.phase));
+                    ctx.beginPath();
+                    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                    ctx.fillStyle = d.color + d.alpha + ')';
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            requestAnimationFrame(draw);
+        })();
 
-    // show success
-    document.getElementById('resetFormWrap').style.display = 'none';
-    document.getElementById('resetSuccess').classList.add('show');
 
-  } catch(err){
-    setResetLoading(false);
-    document.getElementById('resetError').classList.add('show');
-    document.getElementById('resetErrorText').textContent = 'Network error. Please check your connection.';
-  }
-}
 
-// ---- ENTER KEY ON RESET EMAIL ----
-document.getElementById('resetEmail').addEventListener('keydown', function(e){
-  if(e.key === 'Enter'){ handleReset(); }
-});
 
-// ---- INPUT CLEAR ERRORS ON TYPE ----
-document.getElementById('nameInput').addEventListener('input', function(){
-  document.getElementById('nameInput').classList.remove('error');
-  document.getElementById('emailError').classList.remove('show');
-  document.getElementById('globalError').classList.remove('show');
-});
-document.getElementById('passwordInput').addEventListener('input', function(){
-  this.classList.remove('error');
-  document.getElementById('passwordError').classList.remove('show');
-  document.getElementById('globalError').classList.remove('show');
-});
+        (function () {
+            const words = ['PORTFOLIO', 'WEALTH.', 'FUTURE.', 'CAPITAL.'];
+            const accentEl = document.querySelector('.hero-title .accent');
+            const cursor = document.getElementById('twCursor');
+            if (!accentEl || !cursor) return;
+            let wi = 0, ci = 0, deleting = false;
+
+            function type() {
+                const word = words[wi];
+                if (!deleting) {
+                    ci++;
+                    accentEl.textContent = word.slice(0, ci);
+                    if (ci === word.length) {
+                        setTimeout(() => { deleting = true; requestAnimationFrame(loop); }, 2200);
+                        return;
+                    }
+                    setTimeout(loop, 80);
+                } else {
+                    ci--;
+                    accentEl.textContent = word.slice(0, ci);
+                    if (ci === 0) {
+                        deleting = false;
+                        wi = (wi + 1) % words.length;
+                        setTimeout(loop, 400);
+                        return;
+                    }
+                    setTimeout(loop, 45);
+                }
+            }
+            function loop() { type(); }
+            setTimeout(loop, 1800);
+        })();
+
+
+
+
+        (function () {
+            if (window.matchMedia("(pointer: coarse)").matches) return;
+
+
+            const visual = document.querySelector('.hero-visual');
+            const hero = document.getElementById('hero');
+            if (visual && hero) {
+                hero.addEventListener('mousemove', (e) => {
+                    const rect = hero.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+                    const dx = (e.clientX - cx) / (rect.width / 2);
+                    const dy = (e.clientY - cy) / (rect.height / 2);
+
+                    visual.style.transform = `translateY(-50%) translate(${dx * 30}px, ${dy * 20}px) rotateX(${-dy * 15}deg) rotateY(${dx * 15}deg)`;
+                });
+                hero.addEventListener('mouseleave', () => {
+                    visual.style.transform = 'translateY(-50%) rotateX(0) rotateY(0)';
+                    visual.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+                });
+                hero.addEventListener('mouseenter', () => {
+                    visual.style.transition = 'transform 0.1s linear';
+                });
+            }
+
+
+            const cards = document.querySelectorAll('.why-card, .hiw-step, .perf-card, .testi-card');
+            cards.forEach(card => {
+                card.style.transformStyle = 'preserve-3d';
+
+
+                Array.from(card.children).forEach(child => {
+                    child.style.transform = 'translateZ(30px)';
+                    child.style.transition = 'transform 0.3s';
+                });
+
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = ((y - centerY) / centerY) * -10;
+                    const rotateY = ((x - centerX) / centerX) * 10;
+
+                    card.style.transform = `translateY(-6px) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = '';
+                    card.style.transition = 'transform 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.4s, box-shadow 0.4s';
+                });
+
+                card.addEventListener('mouseenter', () => {
+                    card.style.transition = 'transform 0.1s linear, border-color 0.4s, box-shadow 0.4s';
+                });
+            });
+        })();
+
+
+        function footerSubscribe() {
+            const inp = document.getElementById('footerEmail');
+            const btn = inp ? inp.closest('.footer-subscribe-form').querySelector('.footer-submit-btn') : null;
+            if (!inp || !inp.value.includes('@')) {
+                if (inp) { inp.style.borderColor = 'var(--red)'; setTimeout(() => inp.style.borderColor = '', 1500); }
+                return;
+            }
+            if (btn) { btn.textContent = 'SUBSCRIBED ✓'; btn.style.background = '#0e7a5e'; btn.disabled = true; }
+            inp.value = '';
+        }
     </script>
 </body>
 
