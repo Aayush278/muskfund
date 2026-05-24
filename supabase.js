@@ -11,9 +11,9 @@ const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     }
 });
 
-// ------------------------------------------------
-// AUTH HELPERS
-// ------------------------------------------------
+
+
+
 
 async function getSession() {
     const { data: { session }, error } = await db.auth.getSession();
@@ -80,9 +80,9 @@ async function signOut(redirectTo = 'index.html') {
     window.location.href = redirectTo;
 }
 
-// ------------------------------------------------
-// INVESTOR ID HELPER
-// ------------------------------------------------
+
+
+
 
 async function generateInvestorId() {
     const { data, error } = await db
@@ -91,14 +91,26 @@ async function generateInvestorId() {
         .like('investor_id', 'MFH-%')
         .neq('investor_id', 'MFH-ADMIN');
 
-    if (error) return 'MFH-001';
-    const count = (data?.length || 0) + 1;
-    return 'MFH-' + String(count).padStart(3, '0');
+    if (error || !data || data.length === 0) return 'MFH-001';
+
+    let maxId = 0;
+    for (const row of data) {
+        if (row.investor_id && row.investor_id.startsWith('MFH-')) {
+            const numStr = row.investor_id.substring(4);
+            const num = parseInt(numStr, 10);
+            if (!isNaN(num) && num > maxId) {
+                maxId = num;
+            }
+        }
+    }
+
+    const nextId = maxId + 1;
+    return 'MFH-' + String(nextId).padStart(3, '0');
 }
 
-// ------------------------------------------------
-// AUDIT LOG HELPER
-// ------------------------------------------------
+
+
+
 
 async function logAudit(adminId, clientId, action, oldValue = null, newValue = null) {
     await db.from('audit_log').insert({
@@ -110,9 +122,9 @@ async function logAudit(adminId, clientId, action, oldValue = null, newValue = n
     });
 }
 
-// ------------------------------------------------
-// FORMAT HELPERS
-// ------------------------------------------------
+
+
+
 
 function formatCurrency(amount) {
     if (amount === null || amount === undefined) return '0.00';
