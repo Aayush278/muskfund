@@ -66,7 +66,7 @@
             border-radius: 2px
         }
 
-        /* SIDEBAR */
+        
         .sidebar {
             position: fixed;
             top: 0;
@@ -226,7 +226,7 @@
             font-family: var(--font-mono)
         }
 
-        /* TOPBAR */
+        
         .topbar {
             position: fixed;
             top: 0;
@@ -285,7 +285,7 @@
             min-width: 0
         }
 
-        /* MAIN */
+        
         .main {
             margin-left: var(--sidebar-w);
             padding-top: calc(var(--topbar-h)+28px);
@@ -295,7 +295,7 @@
             min-height: 100vh
         }
 
-        /* CARDS */
+        
         .card {
             background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
             border: 1px solid var(--border);
@@ -324,7 +324,7 @@
             stroke-linejoin: round
         }
 
-        /* PROFILE HEADER */
+        
         .profile-header {
             display: flex;
             align-items: flex-start;
@@ -432,7 +432,7 @@
             margin-top: 20px
         }
 
-        /* STAT CARDS */
+        
         .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -446,7 +446,7 @@
             }
         }
 
-        /* TWO-COL GRID — chart+details & danger zone */
+        
         .two-col-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -460,7 +460,7 @@
             gap: 16px
         }
 
-        /* SKELETON inline-grid replacement */
+        
         .skeleton-stat-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -524,7 +524,7 @@
             color: var(--red)
         }
 
-        /* BUTTONS */
+        
         .btn {
             display: inline-flex;
             align-items: center;
@@ -589,7 +589,7 @@
             transform: none
         }
 
-        /* FORM */
+        
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -657,7 +657,7 @@
             margin-top: 2px
         }
 
-        /* ACTION TABS */
+        
         .action-tabs {
             display: flex;
             gap: 8px;
@@ -710,13 +710,13 @@
             }
         }
 
-        /* CHART */
+        
         .chart-wrap {
             height: 200px;
             position: relative
         }
 
-        /* TABLE */
+        
         .table-wrap {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch
@@ -786,7 +786,7 @@
             color: var(--grey)
         }
 
-        /* MODAL */
+        
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -845,7 +845,7 @@
             flex-wrap: wrap
         }
 
-        /* TOAST */
+        
         .toast-wrap {
             position: fixed;
             bottom: 24px;
@@ -910,7 +910,7 @@
             flex-shrink: 0
         }
 
-        /* SKELETON */
+        
         .skeleton {
             background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
             background-size: 200% 100%;
@@ -928,7 +928,7 @@
             }
         }
 
-        /* DANGER ZONE */
+        
         .danger-zone {
             border: 1px solid rgba(255, 77, 77, 0.2);
             border-radius: 12px;
@@ -950,7 +950,7 @@
             line-height: 1.6
         }
 
-        /* EMPTY */
+        
         .empty-state {
             display: flex;
             flex-direction: column;
@@ -981,7 +981,7 @@
             color: var(--grey)
         }
 
-        /* SECTION LABEL */
+        
         .section-label {
             font-size: 11px;
             font-weight: 600;
@@ -1001,7 +1001,7 @@
             background: var(--border)
         }
 
-        /* BOTTOM NAV MOBILE */
+        
         .bottom-nav {
             display: none;
             position: fixed;
@@ -1060,7 +1060,7 @@
 
 
 
-        /* ── MOBILE (≤768px) ── */
+        
         @media(max-width:768px) {
             .sidebar {
                 display: none
@@ -1088,7 +1088,7 @@
                 display: flex
             }
 
-            /* Profile card */
+            
             .profile-header {
                 gap: 14px;
                 align-items: flex-start
@@ -1140,14 +1140,14 @@
                 padding: 8px 12px
             }
 
-            /* Cards */
+            
             .card {
                 padding: 16px;
                 border-radius: 14px;
                 margin-bottom: 14px
             }
 
-            /* Stat cards */
+            
             .stat-mini {
                 padding: 14px 12px
             }
@@ -1160,7 +1160,7 @@
                 font-size: 15px
             }
 
-            /* Back button — keep text visible */
+            
             .back-btn {
                 padding: 6px 10px;
                 font-size: 12px
@@ -1171,7 +1171,7 @@
             }
         }
 
-        /* ── SMALL PHONE (≤480px) ── */
+        
         @media(max-width:480px) {
             .profile-name {
                 font-size: 22px
@@ -1186,7 +1186,7 @@
             }
         }
 
-        /* ── TINY PHONE (≤360px) ── */
+        
         @media(max-width:360px) {
             .profile-header {
                 flex-direction: column
@@ -1227,7 +1227,7 @@
         }
     </style>
 
-    <!-- Mobile Performance Optimizations & Grid Fixes -->
+    
     <style>
         @media (max-width: 768px) {
             body::before, body::after { display: none !important; animation: none !important; }
@@ -1236,7 +1236,7 @@
             html { scroll-behavior: auto !important; }
         }
         @media (max-width: 480px) {
-            /* Force all multi-column grids to 1 column on very small phones to prevent overflow */
+            
             .stats-grid, .cards-grid, .actions-grid, .two-col-grid, .form-row, .stats-row, .skeleton-stat-row { 
                 grid-template-columns: 1fr !important; 
             }
@@ -1250,7 +1250,7 @@
 
 <body>
 
-    <!-- SIDEBAR -->
+    
     <aside class="sidebar">
         <a href="admin-dashboard.html" class="sidebar-logo">
             <div class="sidebar-logo-icon">
@@ -1326,7 +1326,7 @@
         </div>
     </aside>
 
-    <!-- TOPBAR -->
+    
     <header class="topbar">
         <div class="topbar-left">
             <a href="admin.html" class="back-btn">
@@ -1341,7 +1341,7 @@
         </div>
     </header>
 
-    <!-- BOTTOM NAV -->
+    
     <nav class="bottom-nav">
         <a href="admin-dashboard.html" class="bnav-item"><svg viewBox="0 0 24 24">
                 <rect x="3" y="3" width="7" height="7" />
@@ -1372,10 +1372,10 @@
             </svg><span>Logout</span></button>
     </nav>
 
-    <!-- TOAST -->
+    
     <div class="toast-wrap" id="toastWrap"></div>
 
-    <!-- DELETE MODAL -->
+    
     <div class="modal-overlay" id="deleteModal">
         <div class="modal">
             <div class="modal-title">DELETE INVESTOR</div>
@@ -1388,7 +1388,7 @@
         </div>
     </div>
 
-    <!-- SUSPEND MODAL -->
+    
     <div class="modal-overlay" id="suspendModal">
         <div class="modal">
             <div class="modal-title" id="suspendModalTitle">SUSPEND ACCOUNT</div>
@@ -1401,10 +1401,10 @@
         </div>
     </div>
 
-    <!-- MAIN -->
+    
     <main class="main">
 
-        <!-- SKELETON -->
+        
         <div id="skeletonView">
             <div class="skeleton" style="height:140px;border-radius:16px;margin-bottom:20px"></div>
             <div class="skeleton-stat-row">
@@ -1416,10 +1416,10 @@
             <div class="skeleton" style="height:400px;border-radius:16px"></div>
         </div>
 
-        <!-- REAL CONTENT -->
+        
         <div id="realContent" style="display:none">
 
-            <!-- PROFILE HEADER CARD -->
+            
             <div class="card fadein">
                 <div class="profile-header">
                     <div class="profile-avatar-lg" id="clientAvatar">?</div>
@@ -1477,7 +1477,7 @@
                 </div>
             </div>
 
-            <!-- PORTFOLIO STAT CARDS -->
+            
             <div class="stats-row fadein" style="animation-delay:0.05s">
                 <div class="stat-mini">
                     <div class="stat-mini-label">Invested</div>
@@ -1497,7 +1497,7 @@
                 </div>
             </div>
 
-            <!-- ACTIONS CARD -->
+            
             <div class="card fadein" style="animation-delay:0.1s">
                 <div class="card-title">
                     <svg viewBox="0 0 24 24">
@@ -1507,7 +1507,7 @@
                     Manage Portfolio
                 </div>
 
-                <!-- TABS -->
+                
                 <div class="action-tabs">
                     <button class="tab-btn active" onclick="switchTab('deposit')">Deposit</button>
                     <button class="tab-btn" onclick="switchTab('withdrawal')">Withdrawal</button>
@@ -1517,7 +1517,7 @@
                     <button class="tab-btn" onclick="switchTab('notes')">Notes</button>
                 </div>
 
-                <!-- DEPOSIT -->
+                
                 <div class="tab-panel active" id="tab-deposit">
                     <div class="form-row">
                         <div class="form-group">
@@ -1546,7 +1546,7 @@
                     </button>
                 </div>
 
-                <!-- WITHDRAWAL -->
+                
                 <div class="tab-panel" id="tab-withdrawal">
                     <div class="form-row">
                         <div class="form-group">
@@ -1574,7 +1574,7 @@
                     </button>
                 </div>
 
-                <!-- BONUS -->
+                
                 <div class="tab-panel" id="tab-bonus">
                     <div class="form-row">
                         <div class="form-group">
@@ -1601,7 +1601,7 @@
                     </button>
                 </div>
 
-                <!-- RETURN UPDATE -->
+                
                 <div class="tab-panel" id="tab-return_update">
                     <div class="form-row">
                         <div class="form-group">
@@ -1635,7 +1635,7 @@
                     </button>
                 </div>
 
-                <!-- EDIT DETAILS -->
+                
                 <div class="tab-panel" id="tab-edit_details">
                     <div class="form-row">
                         <div class="form-group">
@@ -1661,7 +1661,7 @@
                     </button>
                 </div>
 
-                <!-- NOTES -->
+                
                 <div class="tab-panel" id="tab-notes">
                     <div class="form-group">
                         <label class="form-label">Internal Notes</label>
@@ -1682,7 +1682,7 @@
 
             </div>
 
-            <!-- CHART + DETAILS -->
+            
             <div class="two-col-grid fadein" style="animation-delay:0.15s">
                 <div class="card">
                     <div class="card-title">
@@ -1706,7 +1706,7 @@
                 </div>
             </div>
 
-            <!-- TRANSACTIONS -->
+            
             <div class="section-label">Transaction History</div>
             <div class="card fadein">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
@@ -1739,7 +1739,7 @@
                 </div>
             </div>
 
-            <!-- DANGER ZONE -->
+            
             <div class="section-label">Danger Zone</div>
             <div class="card fadein">
                 <div class="two-col-grid-sm">
@@ -1837,16 +1837,16 @@
             document.getElementById('sidebarName').textContent = adminProfile.full_name || 'Admin';
             setTodayDates();
 
-            // fetch client profile
+            
             const { data: profile, error: pErr } = await db.from('profiles').select('*').eq('id', clientId).single();
             if (pErr || !profile) { showToast('Investor not found', 'error'); window.location.href = 'admin.html'; return; }
             clientProfile = profile;
 
-            // fetch portfolio
+            
             const { data: portfolio } = await db.from('portfolios').select('*').eq('client_id', clientId).single();
             clientPortfolio = portfolio;
 
-            // fetch transactions
+            
             const { data: txns } = await db.from('transactions').select('*').eq('client_id', clientId).order('date', { ascending: true });
             clientTxns = txns || [];
 
@@ -2035,7 +2035,7 @@
 
             if (!date) { showToast('Please select a date', 'error'); return; }
 
-            // insert transaction
+            
             const { error: txnErr } = await db.from('transactions').insert({
                 client_id: clientId,
                 date: date,
@@ -2047,7 +2047,7 @@
 
             if (txnErr) { showToast('Failed to log transaction: ' + txnErr.message, 'error'); return; }
 
-            // audit log
+            
             await logAudit(adminProfile.id, clientId, 'ADD_TRANSACTION',
                 { type: 'previous', value: clientPortfolio.current_value },
                 { type, amount, newValue }
@@ -2055,7 +2055,7 @@
 
             showToast(type + ' added successfully');
 
-            // reload
+            
             const { data: updatedPort } = await db.from('portfolios').select('*').eq('client_id', clientId).single();
             clientPortfolio = updatedPort;
             const { data: updatedTxns } = await db.from('transactions').select('*').eq('client_id', clientId).order('date', { ascending: true });
@@ -2066,7 +2066,7 @@
             renderTransactions();
             renderAccountDetails();
 
-            // clear inputs
+            
             ['depositAmount', 'depositRemark', 'withdrawalAmount', 'withdrawalRemark', 'bonusAmount', 'bonusRemark', 'returnAmount', 'returnRemark', 'monthlyReturn'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.value = '';
@@ -2093,14 +2093,14 @@
             const lockin = document.getElementById('editLockin').value.trim();
             const withdrawalDate = document.getElementById('editWithdrawalDate').value;
 
-            // Update profiles
+            
             const { error: profileErr } = await db.from('profiles').update({
                 aadhaar_last_6: aadhaar || null
             }).eq('id', clientId);
 
             if (profileErr) { showToast('Failed to update Aadhaar', 'error'); return; }
 
-            // Update portfolios
+            
             const portUpdates = {
                 lockin_period_months: lockin ? parseInt(lockin) : null,
                 withdrawal_date: withdrawalDate || null
@@ -2109,7 +2109,7 @@
 
             showToast('Details updated successfully');
             
-            // reload
+            
             const { data: profile } = await db.from('profiles').select('*').eq('id', clientId).single();
             clientProfile = profile;
             const { data: updatedPort } = await db.from('portfolios').select('*').eq('client_id', clientId).single();
@@ -2119,7 +2119,7 @@
             renderAccountDetails();
         }
 
-        // SUSPEND / ACTIVATE
+        
         function openSuspendModal() {
             const isActive = clientProfile.is_active;
             document.getElementById('suspendModalTitle').textContent = isActive ? 'SUSPEND ACCOUNT' : 'ACTIVATE ACCOUNT';
@@ -2144,7 +2144,7 @@
             showToast(newStatus ? 'Account activated' : 'Account suspended');
         }
 
-        // DELETE
+        
         function openDeleteModal() {
             document.getElementById('deleteModalName').textContent = clientProfile.full_name || 'this investor';
             openModal('deleteModal');
@@ -2157,17 +2157,21 @@
             await logAudit(adminProfile.id, clientId, 'DELETE_CLIENT',
                 { full_name: clientProfile.full_name, investor_id: clientProfile.investor_id }, null);
 
-            // delete portfolio, transactions (cascade handles it but explicit is safe)
-            await db.from('transactions').delete().eq('client_id', clientId);
-            await db.from('portfolios').delete().eq('client_id', clientId);
-            await db.from('profiles').delete().eq('id', clientId);
+            
+            const { error: rpcErr } = await db.rpc('delete_user', { user_id_to_delete: clientId });
+            if (rpcErr) {
+                showToast('Failed to completely delete user: ' + rpcErr.message, 'error');
+                document.getElementById('deleteConfirmBtn').disabled = false;
+                document.getElementById('deleteConfirmBtn').textContent = 'Delete Permanently';
+                return;
+            }
 
             closeModal('deleteModal');
             showToast('Investor deleted');
             setTimeout(() => { window.location.href = 'admin.html'; }, 1200);
         }
 
-        // close modals on overlay click
+        
         document.querySelectorAll('.modal-overlay').forEach(o => {
             o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
         });
